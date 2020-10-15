@@ -1,0 +1,17 @@
+#|/bin/bash
+
+cd /home/keithhedger/StartUpScripts
+
+./ChangeDesktop
+
+./StartComposite &
+#./StartBeryl > /dev/null
+./StartCube
+./StartSynergy
+sleep 10
+#./SetBootSplash
+
+./SelectBackground
+
+
+#xsnow -notrees -santa 2 -santaspeed 10 -treex 520 -treey 530 -nokeepsnow & &

@@ -1,0 +1,31 @@
+theme	Xmas
+delay	75000
+offsety	0
+lampset	0
+lampy	0
+flyer	0
+figure	0
+
+tree	1
+treex	-1000
+treey	-5000
+star	1
+stardelay	15
+tinsel	1
+treelampset	2
+treelampdelay	20
+
+falling	2
+falldelay	1
+maxfalling	1000
+fallingspread	100
+fallingspeed	6
+minfallspeed	2
+fallinanimdelay	8
+drift	4
+wind	0
+usegusts	0
+bsettleheight	100
+wsettleheight	40
+settlerate	2
+clearonmaxhight	1

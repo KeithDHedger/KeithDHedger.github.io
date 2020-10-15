@@ -1,0 +1,61 @@
+#!/bin/bash
+#
+#you will need zenity installed for this
+#ask whether to kill, stop, resume or show task list
+#select a raio button and press ok
+#click on a window to kill, stop or resume
+#option 4 - task list, will bring up a list of all your owned tasks (this could easily be modified to show all tasks)
+#you can then select one or more tasks and again kill, stop or resume them
+#this probably needs to have a propper gui made for it but zenity is ok for a couple of small dialogs
+#
+#i made a simple  launcher for this and put it in my top bar so all i have to do is click on it
+ 
+#change this to select an icon for the windows
+ICONPATH=/home/keithhedger/Scripts/thumbs_down.png
+
+RESULT=$(zenity --window-icon=$ICONPATH --list --text="What To Do?" --title="Task Control" --height=220 --radiolist  --column "" --column "" TRUE "Stop" FALSE "Resume" FALSE "Kill" FALSE "Show List")
+
+case $RESULT in
+
+	"Stop" | "Resume" | "Kill")
+		wid=$(xwininfo |grep 'Window id:' |cut -d" " -f4)
+		PIDTOSIG=$(xprop -id "$wid" |grep "^_NET_WM_PID" | cut -d" " -f3)
+		;;
+
+	"Show List" )
+		TEMPFILE=$(mktemp)
+		ps -au$USER -o "%p:::%a" | while read line
+		do
+			if [ "X$line" != "XPID:::COMMAND" ];then
+				pid=$(echo $line|gawk -F::: '{print $1}')
+				command=$(echo $line|gawk -F::: '{print $2}')
+				echo "FALSE '$pid' '$command'" >> $TEMPFILE
+			fi
+		done
+		PIDTOSIG=$(cat $TEMPFILE | xargs zenity --window-icon=$ICONPATH --list --text="Select A Process" --title="Task Control - Process List" --height=400 --width=400 --text="Select Process[es]" --hide-column=2 --checklist  --separator=" " --column "" --column "" --column "")
+		rm $TEMPFILE
+		if [ "X$PIDTOSIG" = "X" ];then
+			exit 0
+		fi
+		RESULT=$(zenity --window-icon=$ICONPATH --list --text="What To Do?" --title="Task Control" --radiolist  --column "" --column "" TRUE "Stop" FALSE "Resume" FALSE "Kill")
+		;;
+
+	* )
+		exit 0
+
+esac
+
+case $RESULT in
+	"Stop" )
+		kill -SIGSTOP $PIDTOSIG
+		;;
+
+	"Resume" )
+		kill -SIGCONT $PIDTOSIG
+		;;
+
+	"Kill" )
+		kill -SIGKILL $PIDTOSIG
+		;;
+esac
+

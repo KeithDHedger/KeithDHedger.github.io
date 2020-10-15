@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+    <meta content="text/html; charset=windows-1252" http-equiv="Content-Type">
+    <title>gtksu</title>
+  </head>
+  <body background="background.png">
+    <div align="center"><font size="+3"><br>
+        <big><u><b>Gtksu</b></u></big></font><br>
+      <br>
+      <hr size="2" width="100%"><b>Gtksu - what is it?</b><br>
+      <br>
+      Simple its a simple replacement for gksu/ktsuss etc that allows
+      you to run a program with different privileges ( root etc ).<br>
+      <br>
+      Although there are other programs of theis type most if not all
+      rely on polkit or have a large number of dependencies, apps like
+      ktsuss which this app was inspired by ( available
+      here:http://ktsuss.googlecode.com/files/ktsuss-2.tar.gz ), some
+      like ktsuss seem to have been abandoned ( last commit was 2011 ).<br>
+      <br>
+      Also it seems that whenever polkit ( which is a nightmare! ) is
+      updated these programs break, so this is the result there are few
+      dependencies a reasonable recent gtk and glib and that's it.<br>
+      <br>
+      <b>Installation</b><br>
+      <br>
+      Just run ./configure or ./autogen.sh from this folder then make
+      and sudo make install.<br>
+      To install to ( say ) /usr instead of the default /usr/local, add
+      --prefix=/usr, --enable-ktsuss-link will as it says link ktsuss to
+      gtksu so that some programs that hard code the files think that
+      ktsuss is being used ( spacefm ).<br>
+      <br>
+      You can also choose to build a QT5 version by adding --enable-qt5
+      to the configure command, the default is to build a gtk GUI.<br>
+      <br>
+      <b>Usage:</b><br>
+      <br>
+      gtksu [OPTION] [--] &lt;command&gt;<br>
+      Run a command as another user<br>
+      -u, --user USER&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; Runs the command as the given user<br>
+      -m, --message MESG&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Change
+      default message in ktsuss window<br>
+      <br>
+      <b>Simple usage:</b><br>
+      gtksu terminal.<br>
+      <br>
+      If you need to add options use -- like so:<br>
+      gtksu -u root -- terminal --hold -x ls -AF /<br>
+      <br>
+      This programme has the potential to hose your system if used
+      unwisely, <u><b>BE WARNED!</b></u><br>
+      May present a security risk so use at your own risk.<br>
+      <br>
+      <b>Gtk Version</b><br>
+      <a href="gtksu.png"><img alt="gtksu" src="gtksu.png" width="331" border="0" height="157"></a><br>
+      <br>
+      <b>Qt5 Version</b><br>
+      <img alt="" src="qtgtksu.png" width="320" height="164"><br>
+      <br>
+      <b>Get it here:</b><br>
+      <b><a href="https://github.com/KeithDHedger/GtkSu/archive/gtksu-0.1.6.tar.gz">GtkSu
+
+
+
+          0.1.6</a><br>
+        <br>
+      </b>
+      <hr size="2" width="100%"><b><font size="+3"><font size="+1"><a href="../../index.html">Back To Linux</a><br>
+            <br>
+          </font><a href="http://keithhedger.freeddns.org/">Home</a></font></b><br>
+      <hr size="2" width="100%"><br>
+    </div>
+  
+
+</body></html>

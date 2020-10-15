@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#run this at startup
+# set the path to the picture folder
+PICDIR=/media/BackingStore/Pictures/JordanAndEgypt
+PICNAMES=( $(find $PICDIR | grep -i JPG) )
+NUMBER=$RANDOM
+MAXFILES=${#PICNAMES[@]}
+PIC=${PICNAMES[ $(( NUMBER %=  MAXFILES ))]}
+
+gconftool-2 --type string --set /desktop/gnome/background/picture_filename $PIC
+

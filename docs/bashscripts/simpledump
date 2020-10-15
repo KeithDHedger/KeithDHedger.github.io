@@ -1,0 +1,66 @@
+#!/bin/bash
+
+#check for root
+if [ $UID -gt 0 ];then
+	echo "You are NOT root, go away!"
+	exit 1
+fi
+
+#init stuff
+PATHTODUMP="$(which dump)"
+if [ "X${PATHTODUMP}" = "X" ];then
+	echo "I Can't find 'dump' :("
+	exit 2
+fi
+
+#to dump a disk it must be mounted
+echo "Please select a disk to save" 
+DISKTOSAVE=$(mount|grep "/media"|awk '{print $3}'|awk -F "/" '{print $3}')
+
+select THENAME in $DISKTOSAVE
+	do
+		DEV=$(blkid -L "$THENAME")
+		break
+	done
+
+#select the dest disk ( must be mounted )
+echo "Please select a save folder"
+DATA=$(mount|grep "/media"|awk '{print $3}'|awk -F "/" '{print $3}')
+
+select NAME in $DATA
+	do
+		DEST="/media/$NAME"
+		break
+	done
+
+#selecting "Print" will just print the command
+echo "Please select what to do on finish" 
+select FINISH in "Nothing" "Shutdown" "Restart" "Print"
+	do
+		break
+	done
+
+#if you don't have zlib installed you can remove/change -z9 see the dump man page
+#always does a level 0 dump
+FOLDER=${DEST/\/dev\//\/media\/}
+if [ $FINISH = "Print" ];then
+	echo "$PATHTODUMP -z9 -0 -f \"${FOLDER}/LinuxBackups/${THENAME}.$(date +%y%m%d)\" \"$DEV\""
+	exit
+fi
+
+mkdir -p "${FOLDER}/LinuxBackups"
+umount "$DEV"
+
+$PATHTODUMP -z9 -0 -f "${FOLDER}/LinuxBackups/${THENAME}.$(date +%y%m%d)" "$DEV"
+
+case $FINISH in
+	"Nothing")
+		exit
+		;;
+	"Shutdown")
+		poweroff -d
+		;;
+	"Restart")
+		reboot -d
+		;;
+esac

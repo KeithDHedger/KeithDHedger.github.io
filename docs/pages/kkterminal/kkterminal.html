@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252"></head><body vlink="#551A8B" text="#000000" bgcolor="#c0c0c0" alink="#EE0000" link="#0000EE">
+<div align="center"><u><big><font size="+3"><big><b>KKTerminal<br>
+</b></big></font></big></u>
+  <br>
+  <hr size="2" width="100%">Why another terminal emulator? Simple all 
+the others had too many dependencies, or too many bells and whistles or 
+just weren't quite right so I made this simple low resource emulator, it
+ can be built for either gtk2 or gtk3 ( I prefer gtk2 ).<br>
+<br>
+Why 'KKTerminal', just because it fits with my editor <a href="http://kkedit.freeddns.org/">KKEdit</a>.<br>
+<br>
+Although written on Linux From Scratch, it has been quickly tested on *buntu, xfce4.<br>
+Dependenceis are small, just gtk2/3 and libvte to match, if your distros
+ split the dev files from the main package you will have to install 
+them.<br>
+<br>
+Gtk2 version.<br>
+<a href="gtk2.png"><img alt="" src="gtk2.png" width="898" border="0" height="363"></a><br>
+<br>
+Gtk3 version.<br>
+<a href="gtk3.png"><img alt="" src="gtk3.png" width="898" border="0" height="363"></a><br>
+<br>
+Gtk3 version with menu icons.<br>
+<img alt="" src="gtk3withicons.png" width="897" height="367"><br>
+<br>
+Prefs.<br>
+<img alt="" src="prefs.png" width="288" height="227"><br>
+<br>
+As you can see not a lot of difference between the two, preferences are 
+set via a text file&nbsp; '~/.KKTerminal/kkterminal.rc', here you can 
+set background/foreground colour, font and font size, and position/size,
+ the position and size will however be overwritten on exit, a GUI to set
+ the prefs is on it's way.<br>
+There is a manpage installed, and you can right click on a terminal window to pop up a context menu.<br>
+Bells and whistles are limited at the moment but watch this space!<br>
+<br>
+Usage:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Open new instance of kkterminal in '/usr. and list:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kkterminal -m -e ls /<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Open ~ and / in new tabs in running copy of kkterminal:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kkterminal ~ /<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Open new instance of kketeminal at pos 100,200 with width=800 and height=400:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kkterminal -m -x 100 -y 200 -w 800 -g 400<br>
+<br>
+Default is to use a single instance but multiple instances can be opened with the '-m' switch.<br>
+See the manpage for more details.<br>
+<br>
+At the moment the source is <i>only</i> available on github as the project is quite new ( but usable! ) and is liable to rapid change.<br>
+<br>
+Get it here:<br>
+<b><a href="https://github.com/KeithDHedger/KKTerminal/archive/kkterminal-0.1.1.tar.gz">KKTerminal</a><br>
+  <br>
+Building<br>
+Dependencies:<br>
+All:<br>
+</b>X11 and dev files.<br>
+<br>
+<b>Gtk2:<br>
+</b>gtk+-2.0 &gt;= 2.24.0 and dev files<br>
+vte &gt;= 0.28.2 and dev files<br>
+<br>
+<b>Gtk3:</b><br>
+gtk+-3.0 &gt;= 3.10.0 and dev files<br>
+And either:<br>
+vte-2.90 &gt;= 0.29.1 and dev files<br>
+Or:<br>
+vte-2.91 &gt;= 0.40.0 and dev files<br>
+<br>
+To build the Gtk2 version just use the standard:<br>
+./configure --prefix=/usr<br>
+make<br>
+sudo make install<br>
+<br>
+To build the Gtk3 version use:<br>
+./configure --prefix=/usr --enable-gtk3<br>
+make<br>
+sudo make install<br>
+<br>
+
+<hr size="2" width="100%"><b><font size="+3"><font size="+1"><a href="../../index.html">Back To Linux</a><br>
+            <br>
+          </font><a href="http://keithhedger.freeddns.org/">Home</a></font></b><br>
+
+      
+<hr size="2" width="100%"><br>
+<br>
+</div>
+</body></html>

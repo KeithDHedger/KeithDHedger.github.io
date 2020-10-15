@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+    <meta content="text/html; charset=windows-1252" http-equiv="content-type">
+    <title>Bash Scripts</title>
+  </head>
+  <body style="background-image: url(../pics/back4.png);">
+    <div style="text-align: center; font-weight: bold; color: red;"><font size="+3">Bash/Python Scripts</font><br>
+      <br>
+      <hr style="width: 100%; height: 2px;"><span style="font-weight:
+        bold; color: rgb(0, 0, 0);">Quick links:</span><br>
+      <br>
+      <div style="text-align: center; color: black;"> <a href="#simpledump">Simple Dump</a><br>
+        <a href="#vicp">ViCp</a><br>
+        <a href="#makeswitch">MakeSwitch</a><br>
+        <a href="#navplug">Gedit Navigator Plugin</a><br>
+        <a href="#imu">ImageMagick Utilities</a><br>
+        <hr style="width: 100%; height: 2px;"><br>
+        <a name="simpledump"></a><br>
+        <a href="../bashscripts/simpledump" type="text/plain">SimpleDump</a><br>
+        <span style="font-weight: normal;">A simple menu driven front
+          end to the standard linux "dump/restore" programs.</span><br>
+        <a href="../screenshots/simpledump.png"><img alt="" src="screenshots/simpledump.png" style="border: 0px
+            solid; width: 477px; height: 246px;" border="0"></a><br>
+        <hr style="width: 100%; height: 2px;"><br style="font-weight:
+          normal;">
+        <span style="font-weight: normal;"></span><a name="vicp"></a><br>
+        <a style="font-weight: bold;" href="../bashscripts/vicp" type="text/plain">Vicp (Visual copy)</a>
+        <div style="text-align: justify;"><span style="font-weight:
+            normal;">I do a lot of video work so as you can imagine the
+            files can be very big, the standard cp -v command doesn't
+            really give a lot of extra info so I knocked up this script
+            to show a dialog box with file copy progress and overall
+            progress so I can see whats going on with the cp command,
+            all normal cp switches are passed to the cp command ( which
+            is run in the background so this script doesn't slow it up
+            too much ) there is also an extra three switch's "-X" which
+            will not display a dialog box but give command line output,
+            -N which will set a nice level of 15 and an ionice level of
+            7 and --simulate which just prints out what would have been
+            copied, just replace "cp" with "vicp" and you're good to go
+            ( presuming you have named this script "vicp", made it
+            executable and placed it somewhere in your path ).</span><br>
+          <br>
+          <div style="text-align: center;"><a href="../screenshots/vicp.png"><img alt="terminal image" src="screenshots/vicp.png" style="border: 0px solid;
+                width: 555px; height: 262px;" width="872" border="0" height="452"></a><br>
+            <hr style="width: 100%; height: 2px;"><br>
+            <a name="makeswitch"></a><br>
+          </div>
+        </div>
+        <a href="https://dl.dropboxusercontent.com/s/60wemrptdyntfov/makeswitch.tar.gz">Makeswitch</a><br style="font-weight: normal;">
+        <div style="text-align: justify;"><span style="font-weight:
+            normal;">A script to create the various case statements to
+            set variables from the command line and optionally insert
+            them into a file, switches can be created from the commands
+            to the makeswitch script or via a config file, see the man
+            page and example files for full details simple help is:<br>
+            <small>makeswitch -?</small></span><small style="font-weight: normal;"><br style="font-weight:
+              normal;">
+          </small><small style="font-weight: normal;">Usage: makeswitch
+            [OPTION]... [FORMAT]...<br>
+            -b|--binary : Binary states 'ON/OFF'<br>
+            <span style="font-weight: normal;"></span></small><small style="font-weight: normal;">-s|--string : String initial
+            state<br>
+            -i|--init : Initialize variable<br>
+            -n|--no-init : Don't initialize variable<br>
+            -c|--config : Use config file f<br>
+            -a|--app-name : Set the application name<br>
+            -v|--version : Set the application version<br>
+            -x|--xtra-help : Add 'args' to 'help' option<br>
+          </small><small style="font-weight: normal;"><br>
+            FORMAT = n:nnn:vartype:info ...<br>
+            Where n:nnn = short:long-opt<br>
+            vartype = [b|s|n] [binary, string or null]<br>
+            info string for help</small><small style="font-weight:
+            normal;"><br style="font-weight: normal;">
+            <br style="font-weight: normal;">
+            Config file example:<br>
+            APPNAME appname<br>
+            VERSION 0.1.0<br>
+            OUTPUTFILE EncodeVideo/encodevideo.startup<br>
+            Initialize following variables<br>
+            INIT<br>
+            Don't initialize following variables<br>
+            NOINIT<br>
+            BINSTATES Yes/No<br>
+            STRINIT "Initial string value"<br>
+            SWITCH&nbsp; f:file:s:"Encode file FILE"<br>
+            SWITCH k:keep:b:"Save sorted original comics"<br>
+            Paste into front of file FILE (upto ###CUT###)<br>
+            PASTE FILE<br>
+            Version 0.2.1</small><br style="font-weight: normal;">
+          <hr style="width: 100%; height: 2px;"><br>
+          <div style="text-align: center;"><a name="navplug"></a><br>
+          </div>
+          <div style="text-align: center;">
+<div align="center"><a href="https://dl.dropboxusercontent.com/s/vl17zkmp34w9wqh/NavigatorPlugIn.tar.gz">Gedit
+              Navigator Plugin</a><br>
+NO LONGER SUPPORTED!<br>
+  <h3 style="font-weight: normal; text-align: justify;" class="contenttext" align="center">This is a plug-in for gedit
+                that adds three new menus for navigating source code
+                files and adding bookmarks, see the README file in the
+                archive for full details on useage and installation.
+                Requires some flavour of ctags and of course gedit,
+                below are a number of screenshots of it in action:</h3>
+
+</div>
+Definitions in a 'C 'file:<br>
+<p>
+              <a href="../screenshots/npcfile.png"><img alt="plugin c                  file" src="screenshots/npcfile.png" style="border:
+                  0px solid; border: 0px solid; width: 390px; height:
+                  230px;" width="1230" border="0" height="724"></a><br>
+            </p>
+            <p>Definitions in a 'Bash' file:<br>
+              <a href="../screenshots/npbashfile.png"><img alt="" src="screenshots/npbashfile.png" style="border: 0px
+                  solid; border: 0px solid; width: 390px; height:
+                  229px;" width="1230" border="0" height="724"></a><br>
+            </p>
+            <p>Bookmark:<br>
+              <a href="../screenshots/npbookm.png"><img alt="" src="screenshots/npbookm.png" style="border: 0px
+                  solid; border: 0px solid; width: 390px; height:
+                  230px;" border="0"></a></p>
+            <div style="text-align: center;">Open an 'Include' file:<br>
+            </div>
+            <p> <a href="../screenshots/npope.png"><img alt="" src="screenshots/npope.png" style="border: 0px
+                  solid; border: 0px solid; width: 390px; height:
+                  230px;" width="1230" border="0" height="724"></a><br>
+            </p>
+            <hr style="width: 100%; height: 2px;">
+            <p><a name="imu"></a><br>
+              <span style="font-weight: bold;">Image Magick Utilities</span><br>
+            </p>
+          </div><span style="font-weight:
+                normal;">I use Imagemagick quite a lot for various
+                graphics work and I use the colorize and modulate&nbsp;
+                a LOT when doing a theme or icons, the main problem with
+                a command line app ( no matter how good ) is that you
+                have no visual feedback until you convert the whole
+                image, hence these three scripts ( the start of many! )
+                they can be installed and run from the command line or
+                used as a nautilus script by placing them in
+                ~/.gnome2/nautilus-scripts, select an image in nautilus
+                and then select either colourize, modulate&nbsp;
+                brightness from the scripts menu, you can also run any
+                of the other apps from the first so you can colorize and
+                then modulate then adjust the contrast of the image, the
+                dialogs are fairly simple but there is a README file in
+                the archive, you should try to avoid a 1:1 preview as
+                it's quite slow, however when linking the apps and
+                converting the final image you should set the preview of
+                the apps to 1:1.</span><br>
+<span style="font-weight:
+                normal;">
+              </span>
+              <div style="text-align: center;"><div style="text-align: justify;"><div style="text-align: center;"><span style="font-weight:
+                  normal;"></span><br>
+                Colourize:<br>
+                <br>
+                <a href="../screenshots/imagemagickscrshots/colourizescrshot.png"><img alt="" src="screenshots/imagemagickscrshots/colourizescrshot_thumb.jpg" style="border: 0px solid; width: 473px; height:
+                    296px;" width="473" border="0" height="296"></a><br>
+                <br>
+                Modulate:<br>
+                <br>
+                <a href="../screenshots/imagemagickscrshots/modulatescrshot.png"><img alt="" src="screenshots/imagemagickscrshots/modulatescrshot_thumb.jpg" style="border: 0px solid; border: 0px solid; width:
+                    473px; height: 296px;" width="473" border="0" height="296"></a><br>
+                <br>
+                Brightness:<br>
+                <br>
+                <a href="../screenshots/imagemagickscrshots/brightnessscrshot.png"><img alt="" src="screenshots/imagemagickscrshots/brightnessscrshot_thumb.jpg" style="border: 0px solid; width: 473px; height:
+                    296px;" width="473" border="0" height="296"></a><br>
+                <br>
+                <a href="https://dl.dropboxusercontent.com/s/epeltcwddnoxlbk/ImageMagickUtilities.tar.gz">Download
+
+                  Image Magick Utilities</a><br>
+<br>
+<span style="font-weight: normal;"><span style="font-weight: bold;"><span style="font-weight:
+                      bold;"></span></span></span></div>
+            </div>
+            <hr style="width: 100%; height: 2px;"><span style="font-weight: normal;"><span style="font-weight:
+                bold;"><span style="font-weight: bold;"> </span></span></span><br>
+          </div>
+        </div>
+        <span style="font-weight: normal;">The below need re-vamping</span><br>
+        <a href="../bashscripts/ChangeDesktop">Change Desktop</a><br>
+        <br>
+        <span style="text-decoration: underline;"></span><a href="../bashscripts/TaskControl">Task Control</a><br>
+        <img style="width: 22px; height: 22px;" alt="" src="../pics/thumbs_down.png"><br>
+        <a href="../bashscripts/dlfromutube">Download Video From YouTube</a><br>
+        <br>
+        <a href="../../index.html">Back To Linux</a><br>
+        <br>
+        <font size="+2"><a href="http://keithhedger.freeddns.org/">Home</a></font></div>
+    </div>
+  
+
+</body></html>

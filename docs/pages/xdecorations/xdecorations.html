@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+  </head>
+  <body vlink="#33ccff" text="#ffffff" bgcolor="#666666" alink="#33ff33" link="#ccffff" background="back6.png">
+    <br>
+    <div align="center"><font color="#ffffff"><b>Xdecorations</b></font><br>
+      <br>
+      <font color="#ffffff"> XDecorations like it's name implies allows
+        you to set various decorations on the X root window like so:</font><br>
+      <img src="../screenshots/xdecorations/screenxmas.jpg" alt="" width="800" height="500"><br>
+      <br>
+      <img alt="" src="../screenshots/xdecorations/screenhalloween.jpg" width="800" height="502"><br>
+      <br>
+      <img alt="" src="../screenshots/xdecorations/screenxmas2.jpg" width="800" height="500"><br>
+      <br>
+      <b>Movies</b><br>
+      <font size="-1">Click an image to play the movie.</font><br>
+      <br>
+      Autumn Leaves Movie<br>
+      <a href="../../movs/autumn.webm"><img alt="" src="../../movs/thumbs/autumnleaves.jpg" width="608" border="0" height="422"></a><br>
+      <font size="-1"><a href="autumn1.rc">Config file</a></font><br>
+      <br>
+      Christmas Movie 1<br>
+      <a href="../../movs/xmas1.webm"><img alt="" src="../../movs/thumbs/xmas1.jpg" width="608" border="0" height="422"></a><br>
+      <font size="-1"><a href="xmas1.rc">Config File</a></font><br>
+      <br>
+      Christmas Movie 2<br>
+      <a href="../../movs/xmas2.webm"><img alt="" src="../../movs/thumbs/xmas2.jpg" width="608" border="0" height="422"></a><br>
+      <font size="-1"><a href="xmas2.rc">Config File</a></font><br>
+      <br>
+      Halloween Movie<br>
+      <a href="../../movs/halloween1.webm"><img alt="" src="../../movs/thumbs/halloween1.jpg" width="608" border="0" height="422"></a><br>
+      <font size="-1"><a href="halloween1.rc">Config File</a></font><br>
+      <font color="#ffffff">This is along the lines of xsnow/xpenguins,
+        and allows you to set theme able decorations on the desktop, you
+        can choose ( at the moment ) either Halloween,Autumn or Xmas
+        themes or you can add your own.</font><br>
+      <font color="#ffffff"> You can set the speed of the various parts
+        of the theme and their positions, either from the command line
+        or from a config file, ( there is a documented default config
+        file included ).</font><br>
+      <font color="#ffffff"> </font><br>
+      <font color="#ffffff"> If you use the Lubuntu desktop you may have
+        to kill pcmanfm to release the desktop ( this used to be an
+        option in pcmanfm but seems to have disappeared ).</font><br>
+      <font color="#ffffff"> </font><br>
+      In KDE to get the decorations on all workspaces start xdecorations
+      with kstart like so:<br>
+      &nbsp;kstart --alldesktops ./xdecorations -configfile
+      ./xdecorations.rc<br>
+      <br>
+      There are <b>A LOT </b>of options so please have a look at the
+      included documented config file and use:<br>
+      xdecorations -help<br>
+      For quick help ( most up to date ).<br>
+      &nbsp;See the INSTALL file for system stuff.<br>
+      <a href="xdecorations.rc">Documented config file</a><br>
+      <br>
+      Some of the available decorations:<br>
+      <img alt="" src="xmaslights.png" width="292" height="64"><img alt="" src="xmasfigures.png" width="279" height="131"><img alt="" src="xmassnow.png" width="128" height="36"><br>
+      <img alt="" src="xmassanta.png" width="490" height="128"><img alt="" src="xmastrees.png" width="422" height="134"><br>
+      <br>
+      <img alt="" src="leaves.png" width="342" height="48"><br>
+      <img alt="" src="hfigure.png" width="200" height="128"><img alt="" src="hfly.png" width="202" height="103"><img alt="" src="hlamps.png" width="211" height="41"><img alt="" src="htree.png" width="130" height="128"><img src="fall1.png" alt="" width="32" height="31"> <img src="fall2.png" alt="" width="32" height="31"><br>
+      <br>
+      <img alt="" src="clouds1.png" width="487" height="96">&nbsp; <img alt="" src="clouds2.png" width="491" height="96"><br>
+      <img alt="" src="rain.png" width="43" height="24"><br>
+      <br>
+      More to come!<br>
+      <br>
+      The default is to use a transparent window instead of writing
+      direct to the root window because a lot of distros cover the root
+      window.<br>
+      If you have a low spec machine and you find that it is struggling
+      with the default window set up first try disabling double
+      buffering, which speeds things considerably, if that doesn't help
+      try writing direct to the root window which is the fastest option
+      but has some drawbacks, not all distro's support drawing to the
+      root window, desktop icons will be slowly erased ( not gone just
+      rubbed out ), also the alpha channel is not supported on the root
+      window, so no semi-transparent objects ( see the skeleton in the
+      Halloween theme ).<br>
+      <br>
+      <font color="#ffffff"> TODO</font><br>
+      <font color="#ffffff"> Make flying objects animated- DONE.</font><br>
+      <font color="#ffffff"> Make positioning of objects easier (
+        top/bottom etc) -DONE.</font><br>
+      <font color="#ffffff"> Allow multi trees/figures/lamps etc at run
+        time.</font><br>
+      <font color="#ffffff"> Better documentation -1/2 DONE.</font><br>
+      <font color="#ffffff"> Double buffering -DONE.</font><br>
+      <font color="#ffffff"> Restore desktop icons -NOT NEEDED.</font><br>
+      <font color="#ffffff"> And probably a load more stuff.</font><br>
+      <font color="#ffffff"> </font><br>
+      <font color="#ffffff"> <u><b>Building</b></u></font><br>
+      <font color="#ffffff"> To build just extract the tarball cd into
+        the extracted folder and run 'make', there is no configure
+        script, the app can be run from the build folder like so
+        ./xdecorations or you can run 'sudo make install' which will
+        install it globally, default is to install in /usr, but if you
+        want to install elsewhere you will need to manually change the
+        Makefile, DESTDIR is homered for packaging.</font><br>
+      <font color="#ffffff"> </font><br>
+      <font color="#ffffff"> If you are using debian you may have to
+        install some -dev packages like so:</font><br>
+      <font color="#ffffff"> sudo apt-get install build-essentials</font><br>
+      <font color="#ffffff"> sudo apt-get install libxpm-dev libxt-dev
+        libxext-dev</font> libimlib2-dev<br>
+      <font color="#ffffff"> You may or may not need all of these dev
+        packages, for instance xubuntu didn;t need the libxext-dev
+        package but oddly Lubuntu did.</font><br>
+      <font color="#ffffff"> </font><br>
+      <font color="#ffffff"> Fedora users may need to install some
+        -devel packages like so:</font><br>
+      <font color="#ffffff"> sudo yum install libXpm-devel</font><br>
+      <font color="#ffffff"> sudo yum install libXt-devel imlib2-devel</font><br>
+    </div>
+    <b> <br>
+    </b>
+    <div align="center"><b> </b><b><a href="https://github.com/KeithDHedger/XDecorations/archive/XDecorations-0.1.10.tar.gz">Download
+
+
+
+
+
+
+
+
+
+
+
+
+          Latest XDecorations</a><br>
+        <br>
+      </b>
+      <hr size="2" width="100%"><b><br>
+      </b><b><a href="../apps.html">Back To Applications</a></b><br>
+      <br>
+      <font size="+2"><b><a href="http://keithhedger.freeddns.org/">Home</a></b></font><br>
+      <br>
+      <br>
+    </div>
+  
+
+</body></html>
