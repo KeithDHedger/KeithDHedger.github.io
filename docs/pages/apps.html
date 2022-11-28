@@ -1,184 +1,212 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=windows-1252">
-		<title>Linux Applications Command Line And GTK</title>
-		<meta content="K.D.Hedger" name="author">
-		<meta content="Linux Applications Command Line And GTK" name="title">
-		<meta content="This page links to GUI app;ications and command line applications for Linux all released under GPL3" name="description">
-	</head>
-
-	<body background="../pics/back8.png">
-		<a name="totop">
-		<div align="center">
-		<font size="8">
-			<u><b>Applications</b></u>
-		</font>
-		<hr size="2" width="100%">
-
-		<a href="#clims">CliMsg</a><br>
-		<a href="#fbpic">FBPic</a><br>
-		<a href="#xfcecomp">Xfce4-Composite-Editor</a><br>
-		<a href="#themeed">Xfce4-Theme-Manager</a><br>
-<!--        <a href="https://keithdhedger.github.io/Xfce-Theme-Manager/">Xfce4-Theme-Manager</a><br>-->
-		<a href="https://keithdhedger.github.io/KKEdit/">KKEdit</a><br>
-		<a href="kkterminal/kkterminal.html">KKTerminal</a><br>
-		<a href="gtksu/gtksu.html">GtkSu</a><br>
-		<a href="manpageeditor/manpageeditor.html">ManPageEditor</a><br>
-		<a href="aspellgui/aspelgui.html">ASpell GUI</a><br>
-		<a href="clipviewer/clip.html">Clipboard Viewer</a><br>
-		<a href="xdecorations/xdecorations.html">XDecorations</a><br>
-		<br>
-		<a href="../index.html">Back To Software</a>
-		<hr size="2" width="100%">
-		<br>
-
-		<font size="3">
-			<b>Climsg</b>
-		</font>
-		<br>
-		Climsg is a simple inter-process communication program, mostly designed for scripts that don't usually have such a thing.<br>
-		Messages can be sent, received, repeated or flushed from the queue, the message system is handled by the kernel, so any modern kernel should be fine, if you have compiled your own kernel you may have to 'opt in' the message system.<br>
-		Messages can use the default 'key' or can specify a custom 'key' allowing for semi-private communications, also message 'types' can be used, a type is any integer > 0, only messages of the correct type will be peeled of from the queue and printed to stdout, type 0 is a special case and is use to receive any  message regardless of 'type' of course the 'key' must match as well.<br>
-		Because the messages are handled by the kernel, messages can be passed to and received back from a chroot environment.<br>
-		<br>
-		Queues are FIFO and LOCAL only.<br>
-		<br>
-		A simple demo script is included in the source package.<br>
-		To install just extract the source CD into it an do make;sudo make install.<br>
-		<br>
-		<a href="https://github.com/KeithDHedger/CliMsg/archive/climsg-0.1.1.tar.gz">Download CLIMsg</a><br>
-		<br>
-		<b><a href="#totop">Back To Top</a></b><br>
-		<hr size="2" width="100%">
-
-	<span style="font-weight: bold;"><a name="fbpic"></a>FBPic</span><br>
-	<br>
-	<div style="text-align: center;"> A simple command line application to display a ppm image on the linux console.<br>
-	To install repeat the linux mantra "make;sudo make install"<br>
-	<br>
-	<div style="text-align: center;">To display the image /fancyboot/images/main.ppm on the console:<br>
-	<span style="font-weight: bold;">cat /fancyboot/images/main.ppm|fbpic</span><br>
-	<br>
-	To scale and display a jpg on the console via Imagemagik:<br>
-	<span style="font-weight: bold;">convert /fancyboot/images/ntpd.png -scale 1024x768! ppm:-|fbpic</span><br>
-	</div>
-	<br>
-	Simple one line console slideshow, change "scale" to your frame buffer resolution:<br>
-	<span style="font-weight: bold;">setterm -cursor off;find /path/to/pics/*.jpg|while read;do convert -scale 1024x768!
-	ppm:-|fbpic;sleep 2;done;setterm -cursor on</span><br>
-	</div>
-	<br>
-	<big style="font-weight: bold;"><a href="https://dl.dropboxusercontent.com/s/07ntxqoipa5sux1/fbpic.tgz">Download FBPic source</a></big><br>
-	<br><a href="#totop"><b>Back To Top</b></a><br><br>
-	<hr style="width: 100%; height: 2px;"><br>
-	<a name="xfcecomp"></a><span style="font-weight: bold;">Xfce4-Composite-Editor</span><br>
-	<br>
-	<div style="text-align: justify;"><span style="font-weight:
-	normal;">I wrote this simple GUI to control the various Xfce4 WM tweaks that are not available via the "Window Manager Tweaks" control panel.</span><br style="font-weight: normal;">
-	<span style="font-weight: normal;">These settings are available via the xconf settings editor but that is one of the most awkward GUI's I&nbsp; have ever used as you have to select the xfwm4 channel, expand the tree, scroll to the option you want,
-	select it, click edit, change the setting and click save, then the tree gets collapsed and you have to start again!</span><br style="font-weight: normal;">
-	<span style="font-weight: normal;">So this nice simple GUI to control the composite manager, the settings are self explanatory.<br>
-	<br>
-	This is an updated version and all controls are now 'Live',
-	but should you need to you can restart Xfwm4 manually, this version no longer needs gtkdialog as its a 'proper' c application.<br style="font-weight: normal;">
-	</span> <br style="font-weight: normal;">
-	<div align="center"><span style="font-weight: normal;">DEPENDENCIES:</span><br style="font-weight: normal;">
-	gtk+-2.0 &gt;= 2.24.0<br>
-	libxfce4ui-1 &gt;= 4.8.0<br style="font-weight: normal;">
-	libxfconf-0 &gt;= 4.8.1<br>
-	<br style="font-weight: normal;">
-	<span style="font-weight: normal;">INSTALL:</span><br>
-	<span style="font-weight: normal;">(The linux mantra:)</span><br>
-	<span style="font-weight: normal;">./configure</span><br>
-	<span style="font-weight: normal;">make</span><br>
-	<span style="font-weight: normal;">sudo make install</span><br>
-	<span style="font-weight: normal;"></span></div>
-	<br>
-	<div style="text-align: center;"><br>
-	<a href="screenshots/xcomped.jpg"><img alt="" src="screenshots/xcomped.png" style="border: 0px solid;" border="0" height="585" width="482"></a><br>
-	</div>
-	</div>
-	<br>
-	<a style="font-weight: bold;" href="https://github.com/KeithDHedger/Xfwm4CompositeEditor/archive/xfce4-composite-editor-0.2.2.tar.gz">Download Xfce4-Composite-Editor</a><br>
-	<br><a href="#totop"><b>Back To Top</b></a><br><br>
-	<hr style="width: 100%; height: 2px;"><br>
-	<span style="font-weight: normal;"><span style="font-weight:
-	bold;">
-	<a name="themeed"></a>Xfce-Theme-Manager</span><br>
-	<br>
-	</span>
-	Having switched to Xfce from gnome one of the main annoyances I have found is having multiple settings GUI's for setting the theme, one for the window border and one for the controls/icons and neither include thumbnails!<br>
-As I like to switch themes and mix and match this soon became VERY irritating hence this application, as you can see from the screenshots only one GUI is used to set all the bits of a theme, the "Themes" tab contains themes that have an integrated window border/control theme ( and if there is a gnome-like theme.index file that specifies an icon set this will be used as well ), everything is fairly self explanatory, just click on a thumbnail to set a particular theme/window border/control/icon set.<br>
-	Full installation/usage is in the README file in the archive.<br>
-	<br><b><a href="https://keithdhedger.github.io/Xfce-Theme-Manager/">Xfce4-Theme-Manager Full Details</a></b><br>
-	<br>
-	<font size="3">
-	<b>Meta theme tab</b>
-	</font>
-	<br>
-	<img alt="" src="screenshots/xfcethemescrshots/metatab.png"/><br>
-	<br>
-	<font size="3">
-	<b>Window border tab</b>
-	</font>
-	<br>
-	<img alt="" src="screenshots/xfcethemescrshots/wmbordertab.png"/><br>
-	<br>
-	<font size="3">
-	<b>Controls tab</b>
-	</font>
-	<br>
-	<img alt="" src="screenshots/xfcethemescrshots/controlstab.png"/><br>
-	<br>
-	<font size="3">
-	<b>Icons tab</b>
-	</font>
-	<br>
-	<img alt="" src="screenshots/xfcethemescrshots/iconstab.png"/><br>
-	<br>
-	<font size="3">
-	<b>Cursors tab</b>
-	</font>
-	<br>
-	<img alt="" src="screenshots/xfcethemescrshots/cursorstab.png"/><br>
-	<br>
-	<font size="3">
-	<b>Wallpapers tab</b>
-	</font>
-	<br>
-	<img alt="" src="screenshots/xfcethemescrshots/backdrops.png"/><br>
-	<br>
-	<font size="3">
-	<b>Advanced</b>
-	</font>
-	<br>
-	<img alt="advancetab1" src="screenshots/xfcethemescrshots/advancedtab1.png"/><br>
-	<br>
-	<img alt="advancedtab" src="screenshots/xfcethemescrshots/advancedtab2.png"/></a><br>
-	<br>
-	<font size="3">
-	<b>Custom Theme Dialog</b>
-	</font>
-	<br>
-	<img alt="" src="screenshots/xfcethemescrshots/custom.png"/><br>
-	<br>
-	<br>
-	<a style=" font-weight: bold;" href="https://github.com/KeithDHedger/Xfce-Theme-Manager/archive/xfce-theme-manager-0.3.8.tar.gz">Download Xfce-Theme-Manager-0.3.7</a><br>
-	<a style=" font-weight: bold;" href="https://www.dropbox.com/sh/a5gfmckj9ksiqyw/AABLTlm-_g_RUPbB86C8jXhOa?dl=0">Old Versions</a><br>
-	<hr size="2" width="100%">
-<br>
-To be continued ...
-<br>
-<font size="4">
-<b>
-<br>
-<a href="#totop">Back To Top</a><br>
-<br>
-<a href="../index.html">Back To Software</a>
-<br>
-<br>
-</b>
-</font>
-	</div>
-	</body></html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
+    <title>Linux Applications Command Line And GTK</title>
+    <meta content="K.D.Hedger" name="author">
+    <meta content="Linux Applications Command Line And GTK" name="title">
+    <meta content="This page links to GUI app;ications and command line
+      applications for Linux all released under GPL3" name="description">
+  </head>
+  <body background="../pics/back8.png">
+    <a name="totop"> </a>
+    <div align="center"><a name="totop"> <font size="8"> <u><b>Applications</b></u>
+        </font>
+        <hr size="2" width="100%"> </a><a href="#clims">CliMsg</a><br>
+      <a href="#fbpic">FBPic</a><br>
+      <a href="#xfcecomp">Xfce4-Composite-Editor</a><br>
+      <a href="#themeed">Xfce4-Theme-Manager</a><br>
+      <!--        <a href="https://keithdhedger.github.io/Xfce-Theme-Manager/">Xfce4-Theme-Manager</a><br>-->
+      <a href="https://keithdhedger.github.io/KKEdit/">KKEdit</a><br>
+      ( The gtk versions are no longer under active development, please
+      use the QT version which is ).<br>
+      <a moz-do-not-send="true"
+        href="https://keithdhedger.github.io/KKEditQT/index.html">KKEditQT</a><br>
+      <a href="kkterminal/kkterminal.html">KKTerminal</a><br>
+      <a href="gtksu/gtksu.html">GtkSu</a><br>
+      <a href="manpageeditor/manpageeditor.html">ManPageEditor</a><br>
+      <a href="aspellgui/aspelgui.html">ASpell GUI</a><br>
+      <a href="clipviewer/clip.html">Clipboard Viewer</a><br>
+      <a href="xdecorations/xdecorations.html">XDecorations</a><br>
+      <br>
+      <a href="../index.html">Back To Software</a>
+      <hr size="2" width="100%"> <br>
+      <font size="3"> <b>Climsg</b> </font> <br>
+      Climsg is a simple inter-process communication program, mostly
+      designed for scripts that don't usually have such a thing.<br>
+      Messages can be sent, received, repeated or flushed from the
+      queue, the message system is handled by the kernel, so any modern
+      kernel should be fine, if you have compiled your own kernel you
+      may have to 'opt in' the message system.<br>
+      Messages can use the default 'key' or can specify a custom 'key'
+      allowing for semi-private communications, also message 'types' can
+      be used, a type is any integer &gt; 0, only messages of the
+      correct type will be peeled of from the queue and printed to
+      stdout, type 0 is a special case and is use to receive any message
+      regardless of 'type' of course the 'key' must match as well.<br>
+      Because the messages are handled by the kernel, messages can be
+      passed to and received back from a chroot environment.<br>
+      <br>
+      Queues are FIFO and LOCAL only.<br>
+      <br>
+      A simple demo script is included in the source package.<br>
+      To install just extract the source CD into it an do make;sudo make
+      install.<br>
+      <br>
+      <a
+href="https://github.com/KeithDHedger/CliMsg/archive/climsg-0.1.1.tar.gz">Download
+        CLIMsg</a><br>
+      <br>
+      <b><a href="#totop">Back To Top</a></b><br>
+      <hr size="2" width="100%"> <span style="font-weight: bold;"><a
+          name="fbpic"></a>FBPic</span><br>
+      <br>
+      <div style="text-align: center;"> A simple command line
+        application to display a ppm image on the linux console.<br>
+        To install repeat the linux mantra "make;sudo make install"<br>
+        <br>
+        <div style="text-align: center;">To display the image
+          /fancyboot/images/main.ppm on the console:<br>
+          <span style="font-weight: bold;">cat
+            /fancyboot/images/main.ppm|fbpic</span><br>
+          <br>
+          To scale and display a jpg on the console via Imagemagik:<br>
+          <span style="font-weight: bold;">convert
+            /fancyboot/images/ntpd.png -scale 1024x768! ppm:-|fbpic</span><br>
+        </div>
+        <br>
+        Simple one line console slideshow, change "scale" to your frame
+        buffer resolution:<br>
+        <span style="font-weight: bold;">setterm -cursor off;find
+          /path/to/pics/*.jpg|while read;do convert -scale 1024x768!
+          ppm:-|fbpic;sleep 2;done;setterm -cursor on</span><br>
+      </div>
+      <br>
+      <big style="font-weight: bold;"><a
+          href="https://dl.dropboxusercontent.com/s/07ntxqoipa5sux1/fbpic.tgz">Download
+          FBPic source</a></big><br>
+      <br>
+      <a href="#totop"><b>Back To Top</b></a><br>
+      <br>
+      <hr style="width: 100%; height: 2px;"><br>
+      <a name="xfcecomp"></a><span style="font-weight: bold;">Xfce4-Composite-Editor</span><br>
+      <br>
+      <div style="text-align: justify;"><span style="font-weight:
+          normal;">I wrote this simple GUI to control the various Xfce4
+          WM tweaks that are not available via the "Window Manager
+          Tweaks" control panel.</span><br style="font-weight: normal;">
+        <span style="font-weight: normal;">These settings are available
+          via the xconf settings editor but that is one of the most
+          awkward GUI's I&nbsp; have ever used as you have to select the
+          xfwm4 channel, expand the tree, scroll to the option you want,
+          select it, click edit, change the setting and click save, then
+          the tree gets collapsed and you have to start again!</span><br
+          style="font-weight: normal;">
+        <span style="font-weight: normal;">So this nice simple GUI to
+          control the composite manager, the settings are self
+          explanatory.<br>
+          <br>
+          This is an updated version and all controls are now 'Live',
+          but should you need to you can restart Xfwm4 manually, this
+          version no longer needs gtkdialog as its a 'proper' c
+          application.<br style="font-weight: normal;">
+        </span> <br style="font-weight: normal;">
+        <div align="center"><span style="font-weight: normal;">DEPENDENCIES:</span><br
+            style="font-weight: normal;">
+          gtk+-2.0 &gt;= 2.24.0<br>
+          libxfce4ui-1 &gt;= 4.8.0<br style="font-weight: normal;">
+          libxfconf-0 &gt;= 4.8.1<br>
+          <br style="font-weight: normal;">
+          <span style="font-weight: normal;">INSTALL:</span><br>
+          <span style="font-weight: normal;">(The linux mantra:)</span><br>
+          <span style="font-weight: normal;">./configure</span><br>
+          <span style="font-weight: normal;">make</span><br>
+          <span style="font-weight: normal;">sudo make install</span><br>
+          <span style="font-weight: normal;"></span></div>
+        <br>
+        <div style="text-align: center;"><br>
+          <a href="screenshots/xcomped.jpg"><img alt=""
+              src="screenshots/xcomped.png" style="border: 0px solid;"
+              border="0" height="585" width="482"></a><br>
+        </div>
+      </div>
+      <br>
+      <a style="font-weight: bold;"
+href="https://github.com/KeithDHedger/Xfwm4CompositeEditor/archive/xfce4-composite-editor-0.2.2.tar.gz">Download
+        Xfce4-Composite-Editor</a><br>
+      <br>
+      <a href="#totop"><b>Back To Top</b></a><br>
+      <br>
+      <hr style="width: 100%; height: 2px;"><br>
+      <span style="font-weight: normal;"><span style="font-weight:
+          bold;"> <a name="themeed"></a>Xfce-Theme-Manager</span><br>
+        <br>
+      </span> Having switched to Xfce from gnome one of the main
+      annoyances I have found is having multiple settings GUI's for
+      setting the theme, one for the window border and one for the
+      controls/icons and neither include thumbnails!<br>
+      As I like to switch themes and mix and match this soon became VERY
+      irritating hence this application, as you can see from the
+      screenshots only one GUI is used to set all the bits of a theme,
+      the "Themes" tab contains themes that have an integrated window
+      border/control theme ( and if there is a gnome-like theme.index
+      file that specifies an icon set this will be used as well ),
+      everything is fairly self explanatory, just click on a thumbnail
+      to set a particular theme/window border/control/icon set.<br>
+      Full installation/usage is in the README file in the archive.<br>
+      <br>
+      <b><a href="https://keithdhedger.github.io/Xfce-Theme-Manager/">Xfce4-Theme-Manager
+          Full Details</a></b><br>
+      <br>
+      <font size="3"> <b>Meta theme tab</b> </font> <br>
+      <img alt="" src="screenshots/xfcethemescrshots/metatab.png"><br>
+      <br>
+      <font size="3"> <b>Window border tab</b> </font> <br>
+      <img alt="" src="screenshots/xfcethemescrshots/wmbordertab.png"><br>
+      <br>
+      <font size="3"> <b>Controls tab</b> </font> <br>
+      <img alt="" src="screenshots/xfcethemescrshots/controlstab.png"><br>
+      <br>
+      <font size="3"> <b>Icons tab</b> </font> <br>
+      <img alt="" src="screenshots/xfcethemescrshots/iconstab.png"><br>
+      <br>
+      <font size="3"> <b>Cursors tab</b> </font> <br>
+      <img alt="" src="screenshots/xfcethemescrshots/cursorstab.png"><br>
+      <br>
+      <font size="3"> <b>Wallpapers tab</b> </font> <br>
+      <img alt="" src="screenshots/xfcethemescrshots/backdrops.png"><br>
+      <br>
+      <font size="3"> <b>Advanced</b> </font> <br>
+      <img alt="advancetab1"
+        src="screenshots/xfcethemescrshots/advancedtab1.png"><br>
+      <br>
+      <img alt="advancedtab"
+        src="screenshots/xfcethemescrshots/advancedtab2.png"><br>
+      <br>
+      <font size="3"> <b>Custom Theme Dialog</b> </font> <br>
+      <img alt="" src="screenshots/xfcethemescrshots/custom.png"><br>
+      <br>
+      <br>
+      <a style=" font-weight: bold;"
+href="https://github.com/KeithDHedger/Xfce-Theme-Manager/archive/xfce-theme-manager-0.3.8.tar.gz">Download
+        Xfce-Theme-Manager-0.3.7</a><br>
+      <a style=" font-weight: bold;"
+href="https://www.dropbox.com/sh/a5gfmckj9ksiqyw/AABLTlm-_g_RUPbB86C8jXhOa?dl=0">Old
+        Versions</a><br>
+      <hr size="2" width="100%">
+      <br>
+      To be continued ...
+      <br>
+      <font size="4">
+        <b>
+          <br>
+          <a href="#totop">Back To Top</a><br>
+          <br>
+          <a href="../index.html">Back To Software</a>
+          <br>
+          <br>
+        </b>
+      </font> </div>
+  </body>
+</html>
