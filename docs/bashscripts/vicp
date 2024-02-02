@@ -1,373 +1,864 @@
 #!/bin/bash
 
-trap "leave" EXIT HUP INT TERM KILL
-export DIALOGOPTS="--backtitle \"ViCp\""
+############################################################
+#root
+#Fri  2 Feb 12:33:08 GMT 2024
+#Built using: makeswitch -c ViCp.conf
+############################################################
 
-leave ()
-{
-#make sure all the lights are off
-	if [ ! -z $DIAPID ];then
-		tput cup $(($(tput lines)-1)) 0
-		echo  "//@@EOF@@//" >$FIFO
-	fi
-
-#	kill -9 $CPPID $DIAPID $$ 2>/dev/null
-	rm $FIFO 2>/dev/null
-	
-#cos somtimes dialog screws terminal
-	stty sane &>/dev/null
-}
-
-DATAARRAY=""
-NOGRAPH=0
-NICE=0
-RECURSE=0
-ARRAYCNT=0
-DIAPID=""
-TOTALFILES=0
-CURRENTFILE=0
-SIMULATE=0
-NICEVALUE=15
-IONICEVALUE=7
-
-#'cos I'm anal that way!
-prettyprint ()
-{
-
-	local RETVAL="$1"
-
-#special cases "./" - "/" - "."
-
-	if [ ! -z "$RETVAL" ];then
-		RETVAL=${RETVAL#./}
-		if [ -z "$RETVAL" ];then
-			RETVAL="$PWD"
-		fi
-		RETVAL="${RETVAL%/}"
-
-		if [ -z "$RETVAL" ];then
-			echo ""
-			return
-		fi
-
-		if [ "$RETVAL" = "." ];then
-			RETVAL="$PWD"
-		fi
-
-		if [ "${RETVAL:0:1}" != "/" ];then
-			RETVAL="$PWD/$RETVAL"
-		fi
-	fi
-	echo "$RETVAL"
-}
-
-#check some stuff before doing the copy
-sanitycheck ()
-{
-	if [ "${#DATAARRAY[@]}" -gt 2 ] && [ ! -d ${DATAARRAY[ARRAYCNT - 1]} ];then
-		echo "vicp: target is not a directory"
-		exit -1
-	fi
-
-	if [ $RECURSE -eq 0 ];then
-
-		for (( CNT=0;CNT<(( $ARRAYCNT - 1 ));CNT++ ))
-			do
-#non-fatal error dont copy directories unless using recurse
-				if [ -d "${DATAARRAY[$CNT]}" ];then
-					echo "vicp: omitting directory ${DATAARRAY[$CNT]}"
-					DATAARRAY[$CNT]=""
-				fi
-			done
-	fi
-
-	for (( CNT=0;CNT<ARRAYCNT-1;CNT++ ))
-		do
-			if [ ! -e "${DATAARRAY[$CNT]}" ];then
-				echo "vicp: cannot stat ${DATAARRAY[$CNT]} : No such file or directory"
-				exit -1
-			fi
-			DATAARRAY[$CNT]=$(prettyprint "${DATAARRAY[$CNT]}")
-			TOTALFILES=$((TOTALFILES+$(find "${DATAARRAY[$CNT]}" ! -type d |wc -l)))
-		done
-
-	OUT=$(prettyprint "${DATAARRAY[$CNT]}")
-}
-
-#Check command line parameters
-doparams ()
-{
-	local PARAMS CNT
-
-	for PARAMS in "$@"
-
-		do
-			case $PARAMS in
-
-			-[[:alnum:]]*)
-				for (( CNT=1;CNT<${#PARAMS};CNT++ ))
-					do
-#peel off -r and -X
-						if [ ${PARAMS:CNT:1} = "r" -o ${PARAMS:CNT:1} = "R" ];then
-							RECURSE=1
-							continue
-						fi
-						if [ ${PARAMS:CNT:1} = "X" ];then
-							NOGRAPH=1
-							continue
-						fi
-						if [ ${PARAMS:CNT:1} = "N" ];then
-							NICE=1
-							continue
-						fi
-#EVALSTRING is eventually passed to the "real" cp command
-						EVALSTRING="${EVALSTRING} -${PARAMS:CNT:1}"
-					done
-				;;
-
-#we do recursive
-			--recursive)
-				RECURSE=1
-				;;
-
-#just checking
-			--simulate)
-				SIMULATE=1
-				NOGRAPH=1
-				;;
-
-#play nice children!
-			--nice)
-				NICE=1
-				;;
-
-			--[[:alnum:]]*)
-				EVALSTRING="${EVALSTRING} ${PARAMS}"
-				;;
-			
-			*)
-				DATAARRAY[$ARRAYCNT]="${PARAMS}"
-				(( ARRAYCNT++ ))
-				;;
-			esac
-		done
-}
-
-#main cp routine
-docp ()
-{	
-	local TOSIZE PERCENT
-
-#either do a fancy dialog output
-	if [ $NOGRAPH -eq 0 ];then
-		while (( FROMSIZE>TOSIZE )) && ps $CPPID &>/dev/null
-			do
-				TOSIZE=$(stat "$2" 2>/dev/null |grep Size|awk '{print $2}')
-				TOSIZE=${TOSIZE:-0}
-
-				PERCENT=$(echo "scale=2 ;100/($FROMSIZE/($TOSIZE+1))"|bc -l 2>/dev/null )
-				PERCENT=${PERCENT%.?*}
-				if (( PERCENT>100 ));then
-					PERCENT=100
-				fi
-#if only copying one file then no overall progress bar
-#from file=$1 to file =$2
-				if [ $TOTALFILES -gt 1 ];then
-					echo "$1@$2@$TOSIZE@$FROMSIZE@$CURRENTFILE@$PERCENT" >$FIFO
-				else
-					echo "$1@$2@$TOSIZE@$FROMSIZE@$PERCENT" >$FIFO
-				fi
-			done
-#or a dull command line output
-	else
-		while (( FROMSIZE>TOSIZE )) && ps $CPPID &>/dev/null
-			do
-				TOSIZE=$(stat "$2" 2>/dev/null |grep Size|awk '{print $2}')
-				TOSIZE=${TOSIZE:-0}
-				PERCENT=$(echo "scale=2 ;100/($FROMSIZE/($TOSIZE))"|bc -l 2>/dev/null )
-				echo -en "\rCopied ${TOSIZE}B of ${FROMSIZE}B (${PERCENT%.?*}%) to $2"
-			done
-	fi
-
-#just clean up command line output
-	if [ $NOGRAPH -eq 1 ];then
-
-		TOSIZE=$(stat "$2" 2>/dev/null |grep Size|awk '{print $2}')
-		TOSIZE=${TOSIZE:-0}
-
-		if [ "$FROMSIZE$TOSIZE" = "00" ];then
-			PERCENT=100
-		else
-			PERCENT=$(echo "scale=2 ;100/($FROMSIZE/($TOSIZE))"|bc -l 2>/dev/null )
-		fi
-
-		echo -e "\rCopied ${TOSIZE}B of ${FROMSIZE}B (${PERCENT%.?*}%) to $2"
-	fi
-}
-
-#the bit does the actual copying
-dovicp ()
-{
-	local TONAME="$2"
-
-#cp is run in the back ground
-
-	if [ $SIMULATE -eq 1 ];then
-		echo "cp $EVALSTRING \"$1\" \"$TONAME\""
-		return
-	else
-		cp $EVALSTRING "$1" "$TONAME" &
-	fi
-
-	CPPID=$!
-#lets all play together
-
-	if [ $NICE -eq 1 ];then
-		renice -n $NICEVALUE $CPPID &>/dev/null
-		ionice -n $IONICEVALUE  -p $CPPID &>/dev/null
-	fi
-
-	FROMSIZE=$(stat "$1" 2>/dev/null |grep Size|awk '{print $2}')
-
-	if [ -d "$2" ];then
-		TONAME="$TONAME/$(basename "$1")"
-	fi
-
-	(( CURRENTFILE++ ))
-	if [ $NOGRAPH -eq 1 ] && [ $TOTALFILES -gt 1 ];then
-		echo "File $CURRENTFILE of $TOTALFILES"
-	fi
-
-#run the output stuff	
-	docp "$1" "$TONAME"
-}
-
-#set up the overall progress bar
-setupoverbar ()
-{
-	FROMBAR="                             "
-	BAR=""
-
-	BARSIZE=$(($(tput cols)-10))
-	while (( ${#FROMBAR}<BARSIZE ))
-		do
-			FROMBAR="${FROMBAR}${FROMBAR}"
-		done
-	FROMBAR=${FROMBAR:0:$(($BARSIZE-12))}
-	MID=$(((BARSIZE/2)-5))
-}
-
-#main loop takes care of recursion
-main ()
-{
-	local CNT
-
-#lets all play together
-
-	if [ $NICE -eq 1 ];then
-		renice -n $NICEVALUE $$ &>/dev/null
-		ionice -n $IONICEVALUE  -p $$ &>/dev/null
-	fi
-
-#simple case
-	if [ $RECURSE -eq 0 ] && [ $ARRAYCNT -eq 2 ];then
-		dovicp "${DATAARRAY[0]}" "${DATAARRAY[1]}"
-		exit 0
-	fi
-
-	for (( CNT=0;CNT<(( $ARRAYCNT - 1 ));CNT++ ))
-		do
-
-#dropped bad file name passed on command line
-			if [ -z "${DATAARRAY[$CNT]}" ];then
-				continue
-			fi
-
-#if its a directory then recurse
-			if [ -d "${DATAARRAY[$CNT]}" ];then
-				TOFOLD=$(basename "${DATAARRAY[$CNT]}")
-				TOUT="${OUT}/${TOFOLD}"
-				cd "${DATAARRAY[$CNT]}"
-				while read
-					do
-						FROMFILE=$(prettyprint "$REPLY")
-						TOFILE="${OUT}/$(basename "${DATAARRAY[$CNT]}")${FROMFILE##"${DATAARRAY[$CNT]}"}"
-						mkdir -p "$(dirname "$TOFILE")"
-						dovicp "$FROMFILE" "$TOFILE"
-					done < <(find  ! -type d)
-				cd "$OLDPWD"
-#else just a file copy
-			else
-				dovicp "${DATAARRAY[$CNT]}" "$OUT/$(basename "${DATAARRAY[$CNT]}")"
-			fi
-		done
-}
-
-#run the dialog in the background
-rundialog ()
-{
-#taller dialog for multifile copy
-	if [ $TOTALFILES -gt 1 ];then
-		HEIGHT=11
-	else
-		HEIGHT=8
-	fi
-
-	(
-	while [ -e $FIFO ]
-		do
-			read <$FIFO		
-
-#time to go
-			if [ X"$REPLY" = X"//@@EOF@@//" ];then
-				exit 0
-			fi
-
-#print fancy stuff in the dialog box
-			echo "XXX"
-			if [ $(echo "$REPLY"|awk -F "@" '{print NF }') -gt 5 ];then
-				CURRENTFILE=$(echo "$REPLY"|awk -F "@" '{print $5}')
-
-#dialog won't let me have two bars so roll my own
-				TOTSLICES=$(echo "scale=2 ;($BARSIZE/$TOTALFILES*$CURRENTFILE)+0.5"|bc -l 2>/dev/null)
-				TOTSLICES=${TOTSLICES%.?*}
-
-				PERCENT=$(echo "scale=2 ;100/($TOTALFILES/$CURRENTFILE)"|bc -l 2>/dev/null )
-				PERCENT=${PERCENT%.?*}
-				PERCENT=${PERCENT:-0}
-
-				BAR="${FROMBAR:0:$MID}${PERCENT}%${FROMBAR:$MID:$BARSIZE}"
-				TOBAR="\Zb\Z3\Zr  ${BAR:0:$((TOTSLICES))}\Zn\Z3\Zb${BAR:$((TOTSLICES)):$(( BARSIZE-(TOTSLICES) ))}"
-
-				echo "\Zb\Z3File \Zn$CURRENTFILE \Zb\Z3of \Zn$TOTALFILES"
-				echo "\Zb\Z3Overall Progress\Zn"
-				echo "$TOBAR"
-			fi
-			echo "$REPLY"|awk -F "@" '{print "\\Zb\\Z3From:\\Zn"$1}'
-			echo "$REPLY"|awk -F "@" '{print "\\Zb\\Z3To:\\Zn"$2}'
-			echo "$REPLY"|awk -F "@" '{print "\\Zb\\Z3Copied \\Zn" $3 "B \\Zb\\Z3of \\Zn" $4 "B"}'
-			echo "XXX"
-			echo "$REPLY"|awk -F "@" '{print $NF }'
-
-		done |dialog --colors --title "Copying..." --no-collapse --gauge "" $HEIGHT $(($(tput cols)-10))
-
-#run it in the background as a sub proccess
-	)&
-	DIAPID=$!
-}
-
-#lets get going
-setterm -msg off
-doparams "$@"
-sanitycheck
-FIFO=$(tempfile)
-mkfifo $FIFO 2>/dev/null
-setupoverbar
-
-if [ $NOGRAPH -eq 0 ];then
-	rundialog
+if [ -e vicp.include ];then
+	. vicp.include
 fi
 
+OPTCOUNT=0
+
+vicpargs ()
+{
+
+APPNAME="vicp"
+VERSION="0.0.4"
+
+NOGUI=0
+RECURSIVE=0
+RECURSIVE=0
+
+while [ $# -gt 0 ]
+do
+	case "$1" in
+
+		-X|--nogui)
+			NOGUI=1
+			;;
+		-r|--recursive)
+			RECURSIVE=1
+			;;
+		-R|--Recursive)
+			RECURSIVE=1
+			;;
+		'-?'|--help|-h)
+			echo $APPNAME - Version $VERSION
+			echo "Useage: $APPNAME [option] ..."
+			echo "-X|--nogui : No Gui Display"
+			echo "-r|--recursive : I do recurse"
+			echo "-R|--Recursive : I do recurse"
+			echo -e 
+			exit 0
+			;;
+		-v|--version)
+			echo $APPNAME - Version $VERSION
+			exit 0
+			;;
+		*)
+			OPTS[$OPTCOUNT]="$1"
+			(( OPTCOUNT++ ))
+			;;
+	esac
+	shift
+done
+
+}
+###CUT###
+
+trap "leavehere" EXIT HUP INT TERM KILL QUIT
+
+libinit ()
+{
+	BLACK=0
+	RED=1
+	GREEN=2
+	YELLOW=3
+	BLUE=4
+	MAJ=5
+	CYAN=6
+	WHITE=7
+
+	NORMCHARSET="\e(B"
+
+	CURRENTFORE=0
+	CURRENTBACK=7
+	CURRENTSET=$NORMCHARSET
+	CURRENTBOLD=0
+	CURRENTBB=0
+
+	UPL=┌
+	UPR=┐
+	LL=└
+	LR=┘
+	VBAR=│
+	HBAR=─
+
+	CURRENTX=-1
+	CURRENTY=-1
+
+	CURSORXSTACK=""
+	CURSORYSTACK=""
+	STACKCNT=-1
+
+	LINES=$(tput lines)
+	COLS=$(tput cols)
+
+	HIDECURSOR="\e[?25l"
+	SHOWCURSOR="\e[?25h"
+}
+
+libinit
+
+NUMARGS=0
+FILECNT=0
+BOXHITE=13
+BOXWID=$((COLS-12))
+MIDX=$((COLS/2))
+MIDY=$((LINES/2))
+BARWID=$((BOXWID-8))
+STARTX=$((6+4))
+DESTISDIR=0
+
+declare -A FILELIST
+
+leavehere ()
+{
+	trap - EXIT HUP INT TERM KILL QUIT
+#	killall vicp &>/dev/null
+#make sure all the lights are off
+#	kill -9 $CPPID &>/dev/null
+#cos somtimes dialog screws terminal
+	stty sane 2>/dev/null
+	setterm -cursor on 2>/dev/null
+	putcursor 0 $LINES
+
+	exit 0
+}
+
+putcursor ()
+{
+	echo -en "\e[$((${2}));$((${1}))H"
+}
+
+setglobalattr ()
+{
+	while [ "${#@}" -gt 0 ]
+		do	
+			case $1 in
+			
+				fore)
+					CURRENTFORE=$2
+					shift
+					;;
+				back)
+					CURRENTBACK=$2
+					shift
+					;;
+				bold)
+					CURRENTBOLD=$2
+					shift
+					;;
+				bright)
+					if [ $2 -eq 0 ];then
+						CURRENTBB=0
+					else
+						CURRENTBB=60
+					fi
+					shift
+					;;
+				charset)
+					CURRENTSET=$NORMCHARSET
+					shift
+					;;
+			esac
+			
+			shift
+		done
+	resetattrs
+}
+
+clearLine ()
+{
+	local i
+
+	for i in $(seq $1)
+		do
+			echo -ne " "
+		done
+}
+
+brightOn ()
+{
+	CURRENTBB=60
+	echo -en "\e[$CURRENTBOLD;$((30+$CURRENTFORE));$((40+$CURRENTBACK+$CURRENTBB))m$CURRENTSET"
+}
+
+boldOn ()
+{
+	CURRENTBOLD=1
+	echo -en "\e[$CURRENTBOLD;$((30+$CURRENTFORE));$((40+$CURRENTBACK+$CURRENTBB))m$CURRENTSET"
+}
+
+getcursor ()
+{
+	local tmpcursor
+
+	stty -echo
+	echo -n $'\e[6n'
+	read -d R tmpcursor
+	stty echo
+	tmpcursor=${tmpcursor#??}
+	CURRENTX=$((${tmpcursor##*;}))
+	CURRENTY=$((${tmpcursor%%;*}))
+}
+
+resetcursorx ()
+{
+	echo -en "\e[${CURRENTX}G"
+}
+
+movecursor ()
+{
+#$1=move x $2=move y
+	if (( ${1}!=0 ));then
+		if (( $1<0 ));then
+			echo -en "\e[${1#-}D"
+		else
+			echo -en "\e[${1}C"
+		fi
+	fi
+
+	if (( ${2}!=0 ));then
+		if (( $2<0 ));then
+			echo -en "\e[${2#-}A"
+		else
+			echo -en "\e[${2}B"
+		fi
+	fi
+}
+
+drawbox ()
+{
+	local width=$1 height=$2 boxtype=$3 fill=$4
+	local topcolour bottomcolour
+#	local fill=0
+	local i
+	local j
+
+	((width=width-2))
+	((height=height-2))
+
+	getcursor
+	case $boxtype in
+		unfilled)
+			topcolour=$( createcol bold 1 back $CYAN fore $CYAN bright 0 charset 1 )
+			bottomcolour=$( createcol bold 0 fore $BLACK charset 1 back $CYAN bright 0 )
+			fill=0
+			;;
+		dialog)
+			topcolour=$( createcol bold 1 back $CYAN fore $CYAN bright 0 charset 1 )
+			bottomcolour=$( createcol bold 0 fore $BLACK charset 1 back $CYAN bright 0 )
+			fill=1
+			;;			
+		dialoginput)
+			topcolour=$( createcol bold 0 fore $BLACK charset 1 back $CYAN bright 0 )
+			bottomcolour=$( createcol bold 1 back $CYAN fore $CYAN bright 0 charset 1 )
+			fill=1
+			;;			
+		box)
+			topcolour=$(createcol fore $4 charset 1 )
+			bottomcolour=$(createcol fore $5 charset 1)
+			;;
+		fill)
+			topcolour=$(createcol fore $4 charset 1 back $6 )
+			bottomcolour=$(createcol fore $5 charset 1 back $6)
+			fill=1
+			;;
+	esac
+#top
+	echo -ne "$topcolour$UPL"
+	for i in $(seq $width)
+		do
+			echo -ne "$HBAR"
+		done
+		echo -e "$bottomcolour$UPR"
+#middle
+
+	for j in $(seq $height)
+		do
+			resetcursorx
+			echo -ne "$topcolour$VBAR"
+			if ((fill==0));then
+				movecursor $width 0
+			else
+				for i in $(seq $width)
+					do
+						echo -n " "
+					done
+			fi
+			echo -e "$bottomcolour$VBAR"
+		done
+#bottom
+
+	echo -ne "\e[${CURRENTX}G$topcolour$LL"
+	for i in $(seq $width)
+		do
+			echo -ne "$bottomcolour$HBAR"
+		done
+	echo -ne $bottomcolour$LR
+}
+
+pushcursor ()
+{
+	getcursor
+	((STACKCNT=STACKCNT+1))
+	CURSORXSTACK[$STACKCNT]=$CURRENTX
+	CURSORYSTACK[$STACKCNT]=$CURRENTY
+}
+
+popcursor ()
+{
+	putcursor ${CURSORXSTACK[$STACKCNT]} ${CURSORYSTACK[$STACKCNT]}
+	CURRENTX=${CURSORXSTACK[$STACKCNT]}
+	CURRENTY=${CURSORYSTACK[$STACKCNT]}
+	((STACKCNT=$STACKCNT-1))
+}
+
+resetattrs ()
+{
+	echo -en "\e[$CURRENTBOLD;$((30+$CURRENTFORE));$((40+$CURRENTBACK+$CURRENTBB))m$CURRENTSET"
+}
+
+saveattr ()
+{
+	SAVEBOLD=$CURRENTBOLD
+	SAVEFORE=$CURRENTFORE
+	SAVEBACK=$CURRENTBACK
+	SAVEBB=$CURRENTBB
+	SAVESET=$CURRENTSET
+}
+
+restoreattr ()
+{
+	CURRENTBOLD=$SAVEBOLD
+	CURRENTFORE=$SAVEFORE
+	CURRENTBACK=$SAVEBACK
+	CURRENTBB=$SAVEBB
+	CURRENTSET=$SAVESET
+	resetattrs
+}
+
+createcol ()
+{
+	local arg colour
+	local fore=$CURRENTFORE
+	local back=$CURRENTBACK
+	local bold=$CURRENTBOLD
+	local charset=$CURRENTSET
+	local brightback=$CURRENTBB
+
+	while [ "${#@}" -gt 0 ]
+		do	
+			case $1 in
+			
+				fore)
+					fore=$2
+					shift
+					;;
+				back)
+					back=$2
+					shift
+					;;
+				bold)
+					bold=$2
+					shift
+					;;
+				bright)
+					if [ $2 -eq 0 ];then
+						brightback="0"
+					else
+						brightback="60"
+					fi
+					shift
+					;;
+				charset)
+					charset=$NORMCHARSET
+					shift
+					;;
+			esac
+			
+			shift
+		done
+
+	colour="\e[$bold;$((30+$fore));$((40+${back}+${brightback}))m$charset"
+	echo $colour
+}
+
+setForeColour ()
+{
+	CURRENTFORE=$1
+	echo -en "\e[$CURRENTBOLD;$((30+$CURRENTFORE));$((40+$CURRENTBACK+$CURRENTBB))m$CURRENTSET"
+}
+
+setBackColour ()
+{
+	CURRENTBACK=$1
+	echo -en "\e[$CURRENTBOLD;$((30+$CURRENTFORE));$((40+$CURRENTBACK+$CURRENTBB))m$CURRENTSET"
+}
+
+drawbar ()
+{
+#$1=len $2=perc $3 barcolour
+	local slices fill
+	local barsize=$1 perc=$2
+	local cnt
+	local middle=$((barsize/2))
+	local bar
+	local percoffset
+
+	percoffset=${#perc}
+	
+	slices=$(echo "scale=2 ;($barsize/100)"|bc -l 2>/dev/null)
+	fill=$(echo "scale=2 ;$slices*$perc+0.5"|bc -l 2>/dev/null )
+	fill=${fill%.[[:digit:]]*}
+
+	pushcursor
+		drawbox $((barsize+2)) 3 unfilled
+	popcursor
+	movecursor 1 1
+	for cnt in $(seq $barsize)
+		do
+			bar="${bar} "
+		done
+	solidcolour=$(createcol back $3 fore $CYAN bold 0)
+	barcolour=$(createcol back $CYAN fore $3 bold 1 bright 0)
+	bar="${bar:0:middle-percoffset}${perc}%${bar:middle-percoffset:middle-1}"
+	echo -e "${solidcolour}${bar:0:fill}${barcolour}${bar:fill:barsize-fill}"
+	resetattrs
+}
+
+#drawhline startx starty wid attr
+drawHLine ()
+{
+	local i
+
+	saveattr
+	putcursor $1 $2
+	for i in $(seq $3)
+		do
+			echo -ne "${4}$HBAR"
+		done
+	restoreattr
+}
+
+#drawhline startx starty hite attr
+drawVLine ()
+{
+	local i
+
+	saveattr
+	putcursor $1 $2
+	for i in $(seq $3)
+		do
+			putcursor $1 $((i+${2}))
+			echo -ne "${4}$VBAR"
+		done
+	restoreattr
+}
+
+#inwid inhite title
+drawDialogBox ()
+{
+	local innerwidth=$1 innerhite=$2
+	local boxx boxy
+
+	boxx=$(((COLS/2)-(innerwidth/2)+1))
+	boxy=$(((LINES/2)-(innerhite/2)))
+
+	tput setb 1
+	setterm -back $BLUE 
+	clear
+	putcursor 0 2
+	drawHLine 0 2 $COLS $(createcol fore $WHITE back $BLUE charset 1)
+	putcursor 0 0
+	echo -en "$(createcol fore $WHITE back $BLUE)$3"
+
+	putcursor $boxx $boxy
+	drawbox $innerwidth $innerhite "dialog" 0 0 0
+	drawHLine $((boxx+2)) $((boxy+innerhite)) $innerwidth $(createcol fore $BLACK back $BLACK charset 1)
+	drawVLine $((boxx+innerwidth)) $((boxy)) $innerhite $(createcol fore $BLACK back $BLACK charset 1)
+	drawVLine $((boxx+innerwidth+1)) $((boxy)) $innerhite $(createcol fore $BLACK back $BLACK charset 1)
+}
+
+doDialogFilenames()
+{
+	local boxwid=$((COLS-12))
+	local boxhite=$((13))
+	local startx=$((6+4))
+	local voffset=$((MIDY-(boxhite/2)+1))
+	local clearfrom=$((boxwid-9))
+	local clearto=$((boxwid-10))
+
+	putcursor $((startx+5)) $((5+voffset))
+	setglobalattr back $CYAN bright 0
+	clearLine $clearfrom
+	putcursor $((startx+6)) $((6+voffset))
+	clearLine $clearto
+
+	putcursor $startx $((5+voffset))
+	echo -en "${VICPYELLOW}From:${VICPBLACK}$1"
+
+	putcursor $startx $((6+voffset))
+	echo -en "${VICPYELLOW}To:${VICPBLACK}$2"
+
+	putcursor $startx $((1+voffset))
+	echo -en "${VICPYELLOW}Overall Progress"
+	brightOn
+}
+
+doDisplayNoGUI ()
+{
+	local filenum=$1
+	local tosize=$2
+	local fromsize=$3
+	local fileperc=$4
+	local overallperc=$5
+	local filename="$6"
+
+	if [ $FILECNT -eq 1 ];then
+		putcursor 0 $((LINES-1))
+		echo -en "\rCopied ${tosize}B of ${fromsize}B (${fileperc%.?*}%) to ${filename}\e[K"
+	else
+		putcursor 0 $((LINES-1))
+		echo -e "Copying $filenum Of $FILECNT (${overallperc%.?*}%)"
+		echo -en "\rCopied ${tosize}B of ${fromsize}B (${fileperc%.?*}%) to ${filename}\e[K"
+	fi
+}
+
+doDisplay ()
+{
+	local tosize=$2
+	local fromsize=$3
+	local filenum=$1
+	local voffset
+	local fileperc=$4
+	local overallperc=$5
+
+	voffset=$((MIDY-(BOXHITE/2)+1))
+
+	putcursor $STARTX $((voffset))
+	echo -en "${VICPYELLOW}File ${VICPBLACK}$filenum ${VICPYELLOW}Of ${VICPBLACK}$FILECNT"
+
+	putcursor $STARTX $((7+voffset))
+	echo -en "${VICPYELLOW}Copied ${VICPBLACK}$tosize${VICPYELLOW} Of ${VICPBLACK}$fromsize"
+
+	putcursor $STARTX $((8+voffset))
+	drawbar $BARWID $fileperc $YELLOW
+
+	putcursor $STARTX $((2+voffset))
+	drawbar $BARWID $overallperc $YELLOW
+}
+
+resetTerminal ()
+{
+	clear
+	libinit
+	BOXHITE=13
+	BOXWID=$((COLS-12))
+	MIDX=$((COLS/2))
+	MIDY=$((LINES/2))
+	BARWID=$((BOXWID-8))
+	STARTX=$((6+4))
+	VICPYELLOW=$(createcol fore $YELLOW bold 1 back $CYAN)
+	VICPBLACK=$(createcol fore $BLACK bold 0 back $CYAN bright 0)
+
+	if [ $NOGUI -eq 0 ];then
+		drawDialogBox $BOXWID $BOXHITE "ViCp"
+		putcursor $((MIDX-8)) $((MIDY-(BOXHITE/2)))
+		setForeColour $YELLOW
+		setBackColour $CYAN
+		boldOn
+		echo -en "${NORMCHARSET}Copying Files..."
+	fi
+}
+
+copyFile ()
+{
+	local fromsize tosize pct
+	local percent
+
+	fromsize=$(stat -c %s "$1" 2>/dev/null)
+	tosize=0
+	percent=$(echo "scale=2 ;100/($FILECNT/$3)"|bc -l 2>/dev/null )
+	percent=${percent%.?*}
+	percent=${percent:-0}
+
+	cp $CPFLAGS "$1" "$2" &>/dev/null &
+	CPPID=$!
+	if ((fromsize==0));then
+		if [ $NOGUI -eq 1 ];then
+			doDisplayNoGUI "$3" $tosize $fromsize 100 $percent "$2"
+		else
+			doDialogFilenames "$1" "$2"
+			doDisplay "$3" $tosize $fromsize 100 $percent
+		fi
+		return
+	fi
+
+#this for speed
+	if [ $NOGUI -eq 1 ];then
+		while (( fromsize>tosize )) && ps $CPPID &>/dev/null
+			do
+				if [ $(tput lines) -ne $LINES ] || [ $(tput cols) -ne $COLS ];then
+					resetTerminal
+				fi
+				tosize=$(stat -c %s "$2" 2>/dev/null)
+				pct=$(( 100*(tosize)/(fromsize) ))
+				doDisplayNoGUI "$3" $tosize $fromsize $pct $percent "$2"
+			done
+		tosize=$(stat -c %s "$2" 2>/dev/null)
+		doDisplayNoGUI "$3" $tosize $fromsize 100 $percent "$2"
+		echo
+		echo
+	else
+		doDialogFilenames "$1" "$2"
+		while (( fromsize>tosize )) && ps $CPPID &>/dev/null
+			do
+				if [ $(tput lines) -ne $LINES ] || [ $(tput cols) -ne $COLS ];then
+					resetTerminal
+					doDialogFilenames "$1" "$2"
+					doDisplay "$3" $tosize $fromsize 100 $percent
+				fi
+				tosize=$(stat -c %s "$2" 2>/dev/null)
+				pct=$(( 100*(tosize)/(fromsize) ))
+				doDisplay "$3" $tosize $fromsize $pct $percent
+			done
+		tosize=$(stat -c %s "$2" 2>/dev/null)
+		doDisplay "$3" $tosize $fromsize 100 $percent
+	fi
+}
+
+buildFileList ()
+{
+	local d1
+	local d2
+
+	d1=1
+	d2=1
+	FILELIST[0,0]=0
+	FILECNT=0
+
+	for ((i=0;i<${#OPTS[@]}-1;i++))
+		do
+			d2=1
+#skip folder if no recurse.
+			if [ $RECURSIVE -eq 0 ] && [ -d "${OPTS[i]}" ];then
+				echo "vicp: omitting directory '"${OPTS[i]}"'"
+				continue
+			fi
+			while read
+				do
+					FILELIST[$d1,$d2]="$REPLY"
+					(( d2++ ))
+					if [ -f "$REPLY" ];then
+						(( FILECNT++ ))
+					fi
+				done < <(find "${OPTS[i]}")
+#number of sub strings
+				FILELIST[$d1,0]=$d2
+				(( d1++ ))
+		done
+#number of 2d arrays
+	FILELIST[0,0]=$d1
+}
+
+getDestination ()
+{
+	if ((NUMARGS==2)) && [ -d "${OPTS[1]}" ];then
+		echo "${OPTS[1]}/$(basename "${OPTS[0]}")"
+		return
+	fi
+
+	if ((NUMARGS==2));then
+		echo "${OPTS[1]}"
+		return
+	fi
+
+	if ((NUMARGS>2)) && [ -d "${OPTS[NUMARGS-1]}" ];then
+		echo "${OPTS[NUMARGS-1]}"
+		return
+	fi
+}
+
+getLastArg ()
+{
+	echo "${OPTS[NUMARGS-1]}"
+}
+
+optionCheck ()
+{
+	local loop
+
+	DESTISDIR=0
+	if [ $NUMARGS -lt 2 ];then
+		echo "cp: missing destination file operand after ${OPTS[0]}"
+		exit 1
+	fi
+
+	if [ $NUMARGS -gt 1 ];then
+		for((loop=0;loop<NUMARGS-1;loop++))
+			do
+				if ! stat -c %s "${OPTS[loop]}" &>/dev/null;then
+					echo "cp: cannot 'stat ${OPTS[0]}': No such file or directory XXX"
+					exit 1
+				fi
+			done
+	fi
+
+	if [ $NUMARGS -eq 2 ] && [ -d "${OPTS[0]}" ] && [ -f "${OPTS[1]}" ];then
+		echo "cp: cannot overwrite non-directory '${OPTS[1]}' with directory '${OPTS[0]}'"
+		exit 1
+	fi
+
+	if [ $NUMARGS -gt 2 ] && [ ! -d  ${OPTS[NUMARGS-1]} ];then
+		echo "cp: target '${OPTS[NUMARGS-1]}' is not a directory"
+		exit 1
+	fi
+
+	if [ $NUMARGS -eq 2 ] && [ -d "${OPTS[0]}" ];then
+		if [ ! -e "${OPTS[1]}" ];then
+			DESTISDIR=1
+		else
+			DESTISDIR=2
+		fi
+	fi
+
+	if [ $NUMARGS -eq 2 ] && [ ! -d "${OPTS[0]}" ];then
+		DESTISDIR=3
+	fi
+
+	if [ $NUMARGS -eq 2 ] && [ -d "${OPTS[1]}" ];then
+		DESTISDIR=4
+	fi
+}
+
+printfiles ()
+{
+	local j
+	local k
+	local tfold
+	local destdir
+	local lastarg="$(getLastArg)"
+	local domove=0
+	local stripfolder=""
+	local cnt=0
+	local uselastarg=0
+
+	if [ $NOGUI -eq 0 ];then
+		drawDialogBox $BOXWID $BOXHITE "ViCp"
+		putcursor $((MIDX-8)) $((MIDY-(BOXHITE/2)))
+		setForeColour $YELLOW
+		setBackColour $CYAN
+		boldOn
+		echo -en "${NORMCHARSET}Copying Files..."
+	else
+		echo
+	fi
+
+	if [ ! -e "$lastarg" ];then
+		lastarg=$(dirname "${lastarg}")/tmpfold$$
+		domove=1
+	fi
+
+	if [ $DESTISDIR -eq 3 ];then
+		lastarg="$(getLastArg)"	
+		stripfolder=""
+		uselastarg=1
+		domove=0
+	fi
+
+	if [ $DESTISDIR -eq 2 ];then
+		lastarg="$(getLastArg)"	
+		stripfolder=""
+		uselastarg=1
+		domove=0
+	fi
+
+	for (( j=1;j<${FILELIST[0,0]};j++ ))
+		do
+			stripfolder="$(dirname "${FILELIST[$j,1]}")"
+			for (( k=1;k<${FILELIST[$j,0]};k++ ))
+				do
+					if [ "$stripfolder" != "." ];then
+						newfold="${FILELIST[$j,$k]#"${stripfolder}/"}"
+					else
+						newfold="${FILELIST[$j,$k]}"
+					fi
+
+					if [ -d "${FILELIST[$j,$k]}" ];then
+						mkdir -p "${lastarg}/$newfold"
+					else
+						(( cnt++ ))
+						if [ $uselastarg -eq 1 ];then
+							#echo "copyFile "${FILELIST[$j,$k]}" "${lastarg}" $cnt"
+							copyFile "${FILELIST[$j,$k]}" "${lastarg}" $cnt
+						else
+							copyFile "${FILELIST[$j,$k]}" "${lastarg}/$newfold" $cnt
+							#echo "copyFile "${FILELIST[$j,$k]}" "${lastarg}/$newfold" $cnt"
+						fi
+						#copyFile "${FILELIST[$j,$k]}" "${lastarg}/$newfold" $cnt
+					fi
+				done
+		done
+
+	if [ $domove -eq 1 ];then
+		mv "${lastarg}/$(basename "${FILELIST[1,1]}")" "$(getLastArg)"
+		rmdir "${lastarg}"
+	fi
+#	exit 0
+}
+
+main ()
+{
+	NUMARGS=${#OPTS[@]}
+
+	optionCheck
+	VICPYELLOW=$(createcol fore $YELLOW bold 1 back $CYAN)
+	VICPBLACK=$(createcol fore $BLACK bold 0 back $CYAN bright 0)
+
+	buildFileList
+
+	printf $HIDECURSOR
+	printfiles
+	printf $SHOWCURSOR
+}
+
+setCpSwitches ()
+{
+	local cnt
+	local arrary
+	local newcnt=0
+
+	CPFLAGS="--no-dereference "
+
+	for ((cnt=0;cnt<${#OPTS[@]};cnt++))
+		do
+			if [ "${OPTS[cnt]:0:1}" = "-" ];then
+				CPFLAGS="${CPFLAGS} ${OPTS[cnt]}"
+			else
+				arrary[newcnt]="${OPTS[cnt]}"
+				(( newcnt++ ))
+			fi
+		done
+	OPTS=${arrary}
+}
+
+setterm -cursor off
+
+vicpargs "$@"
+setCpSwitches
+
 main
-leave
+putcursor 0 $LINES
+stty sane
+setterm -cursor on
+printf $SHOWCURSOR
+printf "\e[0m"
+
+
+
 
