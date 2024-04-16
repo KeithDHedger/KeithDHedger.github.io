@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ############################################################
-#root
-#Fri  2 Feb 12:33:08 GMT 2024
+#keithhedger
+#Tue 16 Apr 13:49:54 BST 2024
 #Built using: makeswitch -c ViCp.conf
 ############################################################
 
@@ -16,7 +16,7 @@ vicpargs ()
 {
 
 APPNAME="vicp"
-VERSION="0.0.4"
+VERSION="0.0.5"
 
 NOGUI=0
 RECURSIVE=0
@@ -41,7 +41,7 @@ do
 			echo "-X|--nogui : No Gui Display"
 			echo "-r|--recursive : I do recurse"
 			echo "-R|--Recursive : I do recurse"
-			echo -e 
+			echo -e "Calling script as 'vimv' will move files instead of copying"
 			exit 0
 			;;
 		-v|--version)
@@ -112,6 +112,10 @@ MIDY=$((LINES/2))
 BARWID=$((BOXWID-8))
 STARTX=$((6+4))
 DESTISDIR=0
+ISMOVE=0
+DIALOGNAME="ViCp"
+DIALOGMESSAGE="Copying"
+DIALOGSUBMESSAGE="Copied"
 
 declare -A FILELIST
 
@@ -521,11 +525,11 @@ doDisplayNoGUI ()
 
 	if [ $FILECNT -eq 1 ];then
 		putcursor 0 $((LINES-1))
-		echo -en "\rCopied ${tosize}B of ${fromsize}B (${fileperc%.?*}%) to ${filename}\e[K"
+		echo -en "\r${DIALOGSUBMESSAGE} ${tosize}B of ${fromsize}B (${fileperc%.?*}%) to ${filename}\e[K"
 	else
 		putcursor 0 $((LINES-1))
-		echo -e "Copying $filenum Of $FILECNT (${overallperc%.?*}%)"
-		echo -en "\rCopied ${tosize}B of ${fromsize}B (${fileperc%.?*}%) to ${filename}\e[K"
+		echo -e "${DIALOGMESSAGE} $filenum Of $FILECNT (${overallperc%.?*}%)"
+		echo -en "\r${DIALOGSUBMESSAGE} ${tosize}B of ${fromsize}B (${fileperc%.?*}%) to ${filename}\e[K"
 	fi
 }
 
@@ -544,7 +548,7 @@ doDisplay ()
 	echo -en "${VICPYELLOW}File ${VICPBLACK}$filenum ${VICPYELLOW}Of ${VICPBLACK}$FILECNT"
 
 	putcursor $STARTX $((7+voffset))
-	echo -en "${VICPYELLOW}Copied ${VICPBLACK}$tosize${VICPYELLOW} Of ${VICPBLACK}$fromsize"
+	echo -en "${VICPYELLOW}${DIALOGSUBMESSAGE} ${VICPBLACK}$tosize${VICPYELLOW} Of ${VICPBLACK}$fromsize"
 
 	putcursor $STARTX $((8+voffset))
 	drawbar $BARWID $fileperc $YELLOW
@@ -567,12 +571,12 @@ resetTerminal ()
 	VICPBLACK=$(createcol fore $BLACK bold 0 back $CYAN bright 0)
 
 	if [ $NOGUI -eq 0 ];then
-		drawDialogBox $BOXWID $BOXHITE "ViCp"
+		drawDialogBox $BOXWID $BOXHITE $DIALOGNAME
 		putcursor $((MIDX-8)) $((MIDY-(BOXHITE/2)))
 		setForeColour $YELLOW
 		setBackColour $CYAN
 		boldOn
-		echo -en "${NORMCHARSET}Copying Files..."
+		echo -en "${NORMCHARSET}${DIALOGMESSAGE} Files..."
 	fi
 }
 
@@ -587,7 +591,11 @@ copyFile ()
 	percent=${percent%.?*}
 	percent=${percent:-0}
 
-	cp $CPFLAGS "$1" "$2" &>/dev/null &
+	if [[ $ISMOVE -eq 0 ]];then
+		cp $CPFLAGS "$1" "$2" &>/dev/null &
+	else
+		mv "$1" "$2" &>/dev/null &
+	fi
 	CPPID=$!
 	if ((fromsize==0));then
 		if [ $NOGUI -eq 1 ];then
@@ -632,6 +640,8 @@ copyFile ()
 	fi
 }
 
+FOLDERLIST=""
+
 buildFileList ()
 {
 	local d1
@@ -652,6 +662,9 @@ buildFileList ()
 			fi
 			while read
 				do
+					if [[ ! -L "$REPLY" ]] && [[ -d "$REPLY" ]];then
+						FOLDERLIST="${REPLY}\n${FOLDERLIST}"
+					fi
 					FILELIST[$d1,$d2]="$REPLY"
 					(( d2++ ))
 					if [ -f "$REPLY" ];then
@@ -749,12 +762,12 @@ printfiles ()
 	local uselastarg=0
 
 	if [ $NOGUI -eq 0 ];then
-		drawDialogBox $BOXWID $BOXHITE "ViCp"
+		drawDialogBox $BOXWID $BOXHITE $DIALOGNAME
 		putcursor $((MIDX-8)) $((MIDY-(BOXHITE/2)))
 		setForeColour $YELLOW
 		setBackColour $CYAN
 		boldOn
-		echo -en "${NORMCHARSET}Copying Files..."
+		echo -en "${NORMCHARSET}${DIALOGMESSAGE} Files..."
 	else
 		echo
 	fi
@@ -789,7 +802,7 @@ printfiles ()
 						newfold="${FILELIST[$j,$k]}"
 					fi
 
-					if [ -d "${FILELIST[$j,$k]}" ];then
+					if [[ ! -L "${FILELIST[$j,$k]}" ]] && [[ -d "${FILELIST[$j,$k]}" ]];then
 						mkdir -p "${lastarg}/$newfold"
 					else
 						(( cnt++ ))
@@ -814,6 +827,14 @@ printfiles ()
 
 main ()
 {
+	if [[ $(basename "$0") = "vimv" ]];then
+		ISMOVE=1
+		RECURSIVE=1
+		DIALOGNAME="ViMv"
+		DIALOGMESSAGE="Moving"
+		DIALOGSUBMESSAGE="Moved"
+	fi
+
 	NUMARGS=${#OPTS[@]}
 
 	optionCheck
@@ -825,6 +846,15 @@ main ()
 	printf $HIDECURSOR
 	printfiles
 	printf $SHOWCURSOR
+
+#echo ${FILELIST[0,0]}
+#clear
+
+#for ((j=0;j<FILELIST[0,0];j++))
+#do
+##echo ${FILELIST[$j]}
+#echo ${FILELIST[0,$j]}
+#done
 }
 
 setCpSwitches ()
@@ -859,6 +889,11 @@ setterm -cursor on
 printf $SHOWCURSOR
 printf "\e[0m"
 
-
-
-
+if [[ $ISMOVE -eq 1 ]];then
+	while read
+		do
+			if [[ ! "X$REPLY" = "X" ]];then
+				rmdir "$REPLY" ||true
+			fi
+		done < <(echo -e $FOLDERLIST)
+fi
