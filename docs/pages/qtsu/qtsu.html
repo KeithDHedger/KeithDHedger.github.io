@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+    <meta content="text/html; charset=windows-1252" http-equiv="Content-Type">
+    <title>qtsu</title>
+  </head>
+  <body background="background.png">
+ <a name="totop">
+    <div align="center"><font size="+4">
+       <u><b>QtSu</b></u></font><br>
+      <hr size="2" width="100%"><b>QtSu - what is it?</b><br>
+      <br>
+      A simple GUI written in Qt5/6 that allows you to run a program as root.<br>
+      <br>
+      Although there are other programs of theis type most if not all rely on polkit or have a large number of dependencies, apps like ktsuss which this app was inspired by ( available here:http://ktsuss.googlecode.com/files/ktsuss-2.tar.gz ), some like ktsuss seem to have been abandoned ( last commit was 2011 ).<br>
+      <br>
+      Also it seems that whenever polkit ( which is a nightmare! ) is updated these programs break, so this is the result there are few dependencies just Qt5 or Qt6 and glib and that's it.<br>
+      <br>
+      <b>Installation</b><br>
+      <br>
+	  Just run ./configure or ./autogen.sh from this folder then make
+      and sudo make install.<br>
+      QtSu will use the default Qt version installed ( 5.x or 6.x, version 6.x will be prefered ).<br>
+		To install to ( say ) /usr instead of the default /usr/local, add --prefix=/usr, --enable-links will as it says make links from ktsuss and gtksu to qtsu so that some programs that hard code the files think that ktsuss is being used ( spacefm ), default is to enable links.<br>
+	  The gktksu link is legacy and will be removed.<br>
+      <br>
+      <b>Usage:</b><br>
+      <br>
+      qtsu [OPTION] [--] &lt;command&gt;<br>
+      Run a command as another user<br>
+      -u, --user USER&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp; Runs the command as the given user<br>
+      -m, --message MESG&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Change
+      default message in ktsuss window<br>
+      <br>
+      <b>Simple usage:</b><br>
+      qtsu terminal.<br>
+      <br>
+      If you need to add options use -- like so:<br>
+      qtsu -u root -- terminal --hold -x ls -AF /<br>
+      <br>
+      This programme has the potential to hose your system if used
+      unwisely, <u><b>BE WARNED!</b></u><br>
+      May present a security risk so use at your own risk.<br>
+      <br>
+      <b>QtSu</b><br>
+      <a href="qtsu.png"><img alt="qtsu" src="qtsu.png" width="331" border="0" height="157"></a><br>
+      <br>
+      <b>Get it here:</b><br>
+      <b><a href="https://github.com/KeithDHedger/QtSu">QtSu</a><br>
+        <br>
+      </b>
+<hr size="2" width="100%">
+<font size="4">
+<b>
+<br>
+<a href="#totop">Back To Top</a><br>
+<br>
+<a href="../../pages/apps.html">Back To Applications</a>
+<br>
+<br>
+</b>
+</font>
+    </div>
+  
+
+</body></html>
