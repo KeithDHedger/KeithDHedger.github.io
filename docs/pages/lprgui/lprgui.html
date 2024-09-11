@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+  </head>
+  <body bgcolor="#cccccc" alink="#EE0000" vlink="#551A8B" text="#000000"
+    link="#0000EE">
+    <div align="center"><font size="+3"><b><a name="btotop"></a>LprGUI</b><b><br>
+        </b></font></div>
+    <br>
+    <div align="center">QT5 based frontend for lpr cli command.<br>
+      <img moz-do-not-send="true" src="lprgui.png" title="lprgui"
+        alt="lprgui" height="340" width="533"><br>
+      This is a simple gui frontend to the lpr command, as qt5 doesn’t
+      play well with cups, if your app allows you to set a print command
+      you can use this. There are other GUI’s for lp/lpr but they seem
+      to have large dependencies, or need specific librarary versions,
+      this application just needs lpr and lpoptions which are part of
+      CUPS and a reasonable new QT5, which most distros will have
+      installed as default.<br>
+      <br>
+      You can also use this as a standalone app to print any file.<br>
+      <br>
+      You will also of course need a build system ( g++,make qt5 dev
+      files etc ).<br>
+      <br>
+      building/installing:<br>
+    </div>
+    <br>
+    <code>make</code><code><br>
+    </code><code>sudo make install</code><br>
+    <div align="center">or make DESTDIR=“/path/to/install/location”
+      install<br>
+      <br>
+      Or you can build with qmake:<br>
+    </div>
+    <code>mkdir build &amp;&amp; build</code><code><br>
+    </code><code>qmake ..</code><code><br>
+    </code><code>make</code><code><br>
+    </code><code>sudo make install</code><br>
+    <div align="center">or make INSTALL_ROOT=“/path/to/install/location”
+      install<br>
+      <br>
+      You can run the application without needing to install it if you
+      just want to try it.<br>
+      App will now exit gracefully if CUPS is not running or there are
+      no reported printers.<br>
+      <img moz-do-not-send="true" src="error.png" title="error"
+        alt="error" height="136" width="325"><br>
+      Files to be printed can be selected via the ‘Select Files’ button
+      or entered into the files box manualy, files should be sepereated
+      by a colon like so:<br>
+/media/LinuxData/Development64/CPPScripts/qt5/hilighting/C++.txt.cpp:/media/LinuxData/Development64/CPPScripts/qt5/hilighting/testqthilite.cpp<br>
+      <br>
+      Options can be entered into the options box seperated by a colon
+      eg:<br>
+      orientation-requested=6:number-up=4<br>
+      <br>
+      Custom options override prefs and cli options.<br>
+      <br>
+      Options are printer dependant and can be found with:<br>
+      lpoptions -p NAMEOFPRINTER<br>
+      <br>
+      Finished saving and restoring options, have fun!<br>
+      <br>
+      BUGS etc. kdhedger68713@gmail.com<br>
+      <b>Get It Here:<br>
+        <a moz-do-not-send="true"
+          href="https://github.com/KeithDHedger/LprGUI">LprGui</a><br>
+        <br>
+      </b><b>
+        <hr width="100%" size="2"> <font size="4"> <b> </b></font></b><br>
+      <b><font size="4"><b> <a href="#btotop" moz-do-not-send="true">Back
+              To Top</a></b></font></b><br>
+      <b><font size="4"><b> </b></font></b><br>
+      <b><font size="4"><b> <a
+              href="https://keithdhedger.github.io/pages/apps.html"
+              moz-do-not-send="true">Back To Applications</a></b></font></b></div>
+  </body>
+</html>
