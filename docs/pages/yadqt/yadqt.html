@@ -1,8 +1,8 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-
-    <meta http-equiv="content-type" content="text/html; charset=windows-1252">
+    <meta http-equiv="content-type" content="text/html;
+      charset=windows-1252">
     <title>YadQT</title>
     <meta name="author" content="K.D.Hedger">
     <meta name="description" content="This is an app to produce simple
@@ -30,12 +30,18 @@
     </code><code>Options:</code><code><br>
     </code><code>&nbsp; -h,
       --help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       Displays help on commandline options.</code><code><br>
     </code><code>&nbsp;
       --help-all&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       Displays help including Qt specific options.</code><code><br>
     </code><code>&nbsp; -v,
       --version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       Displays version information.</code><code><br>
     </code><code>&nbsp; -t, --title
       &lt;YadQt&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -43,41 +49,69 @@
     </code><code>&nbsp; -b, --body
       &lt;Information&gt;&nbsp;&nbsp;&nbsp;&nbsp; Body.</code><code><br>
     </code><code>&nbsp; -d, --default &lt;keithhedger&gt;&nbsp; Default
-      text ( lists, forms etc ).</code><code><br>
+      text ( lists, forms etc, 1st positional<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      arg passed will overide this ).</code><code><br>
     </code><code>&nbsp;
       --fromstdin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       Read default data from stdin.</code><code><br>
     </code><code>&nbsp; --width
       &lt;640&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       Dialog width ( set to 0 for default size for</code><code><br>
     </code><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       dialog ).</code><code><br>
     </code><code>&nbsp; --height
       &lt;320&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       Dialog height ( set to 0 for default size for</code><code><br>
     </code><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       dialog ).</code><code><br>
     </code><code>&nbsp; --opseparator
       &lt;|&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       Separator for multi item output ( use "newline"</code><code><br>
     </code><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       to use '\n' ).</code><code><br>
     </code><code>&nbsp; --ipseparator
       &lt;|&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       Separator for multi item default text input ( use "newline"</code><code><br>
     </code><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       to use '\n' ).</code><code><br>
     </code><code>&nbsp;
       --multiple&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       Select multiple items ( lists ).</code><code><br>
     </code><code>&nbsp;
       --btntoerr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       Print button to stderr.</code><code><br>
     </code><code>&nbsp; --buttons
       &lt;Ok&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       Buttons ( for info boxes ).</code><code><br>
     </code><code>&nbsp; --type
       &lt;aboutqt&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
       Box Type ( no type will display aboutbox for Qt ).<br>
       <br>
     </code><b>Dialog types:</b><br>
@@ -185,14 +219,27 @@
     <img moz-do-not-send="true" src="screenshots/font.png"
       title="type=font" alt="type=font" height="396" width="508"><br>
     <br>
-    <code>ls -1 ~|yadqt --type=tailbox -t "Tail box" --width=800</code><br>
-    <img moz-do-not-send="true" src="screenshots/tailbox.png"
-      title="type=tailbox" alt="type=tailbox" height="356" width="808"><br>
+    <meta name="qrichtext" content="1">
+    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment--><b>Tailbox will update additions from file</b></p>
+    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><code>tail -n25 -f '/run/XfceWMScript.log' |yadqt --type=tailbox -t "Tail box" --width=800</code></p>
+    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Or</p>
+    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><code>yadqt --type=tailbox -t "Tail box" --width=800 &lt; /run/XfceWMScript.log</code><!--EndFragment--></p>
+    <meta http-equiv="Content-Type" content="text/html;
+      charset=windows-1252">
+    <style type="text/css">
+p, li { white-space: pre-wrap; }</style><img moz-do-not-send="true"
+      src="screenshots/tailbox.png" title="type=tailbox"
+      alt="type=tailbox" height="356" width="808"><br>
     <br>
-    <br>
-    <b>Simple search in current folder:</b><br>
+    <b> Notepad simple text file editor</b><br>
+    <code>yadqt --type=notepad --width=800 --height=400&nbsp;
+      ../../README ;echo $?<br>
+      <img moz-do-not-send="true" src="screenshots/notepad.png"
+        title="--type=tailbox" alt="--type=tailbox" height="436"
+        width="808"><br>
+      <br>
+    </code> <b>Simple search in current folder:</b><br>
     Searches files for text and opens in default app.<br>
-    <br>
     <code>find .&nbsp; -print0 |xargs -0 grep -s
       --binary-files=without-match --ignore-case
       --binary-files=without-match --line-number "$(yadqt --type=input
@@ -220,16 +267,13 @@
           href="https://github.com/KeithDHedger/YadQt">YadQt</a><br>
         <br>
       </b><b>
-        <hr width="100%" size="2">
-        <font size="4">
-          <b>
-          </b></font></b><br>
-      <b><font size="4"><b>
-            <a href="#totop" moz-do-not-send="true">Back To Top</a></b></font></b><br>
-      <b><font size="4"><b>
-          </b></font></b><br>
-      <b><font size="4"><b>
-            <a href="https://keithdhedger.github.io/pages/apps.html"
+        <hr width="100%" size="2"> <font size="4"> <b> </b></font></b><br>
+      <b><font size="4"><b> <a href="#totop" moz-do-not-send="true">Back
+
+              To Top</a></b></font></b><br>
+      <b><font size="4"><b> </b></font></b><br>
+      <b><font size="4"><b> <a
+              href="https://keithdhedger.github.io/pages/apps.html"
               moz-do-not-send="true">Back To Applications</a></b></font></b><br>
     </div>
     <br>
