@@ -141,6 +141,11 @@ yadqt --type=colour --default="#c080ff80" --btntoerr -t "Select a colour..."  2>
 		<img src="screenshots/notepad.png" alt="screenshots/notepad.png" title="type=notepad"><br>
 		<br>
 
+		<b>Richtext simple richtext viewer:</b><br>
+		<code>yadqt --type=richtext --width=800 --height=400 '/tmp/KeithDHedger.github.io/docs/index'</code><br>
+		<img src="screenshots/richtext.png" alt="screenshots/richtext.png" title="type=richtext"><br>
+		<br>
+
 		<b>Simple search in current folder:</b><br>
 		Searches files for text and opens in default app.<br>
 		<code>find .  -print0 |xargs -0 grep -s --binary-files=without-match --ignore-case --binary-files=without-match --line-number "$(yadqt --type=input -t Search -b "Search for")"|yadqt --type=list -t "Found" --width 800 --fromstdin --ipseparator=newline |awk -F: '{print $1}'|xargs xdg-open</code><br>
