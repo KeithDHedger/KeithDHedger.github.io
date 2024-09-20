@@ -1,303 +1,169 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html;
-      charset=windows-1252">
-    <title>YadQT</title>
-    <meta name="author" content="K.D.Hedger">
-    <meta name="description" content="This is an app to produce simple
-      Qt dialogs from the command line, similar to YAD for gtk">
-  </head>
-  <body bgcolor="#cccccc" alink="#EE0000" vlink="#551A8B" text="#000000"
-    link="#0000EE">
-    <div align="center"><font size="+3"><b><a name="totop"></a>YadQt</b></font><br>
-    </div>
-    <div align="center">This is an app to produce simple Qt dialogs from
-      the command line, similar to YAD for gtk.<br>
-      <br>
-      <div align="left"><b>To build/install:</b><br>
-      </div>
-    </div>
-    <code>./autogen.sh --prefix=/usr</code><code><br>
-    </code><code>make</code><code><br>
-    </code><code>make install<br>
-      <br>
-    </code><b>QUICK USE:</b><br>
-    <code>yadqt -h</code><code><br>
-    </code><code><br>
-    </code><code>Usage: yadqt [options]</code><code><br>
-    </code><code><br>
-    </code><code>Options:</code><code><br>
-    </code><code>&nbsp; -h,
-      --help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>YadQT</title>
+	</head>
+	<body bgcolor="#cccccc" text="#000000">
+		<style>
+			gridspan { display: grid; grid-template-columns: max-content auto;}
+			dt {grid-column-start: 1;}
+			dd {grid-column-start: 2;}
+			d3 {grid-column-start: 3;}
+		</style>
+		<a name="top"></a>
+		<div align="center">
+		<div style="font-size:64px;"><b>YadQt</b></div><br>
+		This is an app to produce simple Qt dialogs from the command line, similar to YAD for gtk.
+		</div>
+		<br>
+		<div align="left"></div>
+		<b>To build/install:</b><br>
+		<code>
+			./autogen.sh --prefix=/usr<br>
+			make<br>
+			make install<br>
+		</code><br><br>
 
+		<b>QUICK USE:</b><br>
+		<code>
+			yadqt -h<br>
+			Usage: yadqt [options]<br><br>
+			Options:<br>
+			<gridspan>
+				<dt>-h, --help</dt><dd>Displays help on commandline options.</dd>
+				<dt>--help-all</dt><dd>Displays help including Qt specific options.</dd>
+				<dt>-v, --version</dt><dd>Displays version information.</dd>
+				<dt>-t, --title &lt;YadQt</dt><dd>Title.</dd>
+				<dt>-b, --body &lt;Information</dt><dd>Body.</dd>
+				<dt>-d, --default &lt;USERNAME&gt;</dt><dd>Default text ( lists, forms etc, 1st positional arg passed will overide this ).</dd>
+				<dt>--fromstdin</dt><dd>Read default data from stdin.</dd>
+				<dt>--width &lt;640&gt;</dt><dd>Dialog width ( set to 0 for default size for dialog ).</dd>
+				<dt>--height &lt;320&gt;</dt><dd>Dialog height ( set to 0 for default size for dialog ).</dd>
+				<dt>--opseparator &lt;|&gt;</dt><dd>Separator for multi item output ( use "newline" to use '\n' ).</dd>
+				<dt>--ipseparator &lt;|&gt;</dt><dd>Separator for multi item default text input ( use "newline" to use '\n' ).</dd>
+				<dt>--multiple</dt><dd>Select multiple items ( lists ).</dd>
+				<dt>--btntoerr </dt><dd>Print button to stderr.</dd>
+				<dt>--buttons &lt;Ok&gt;</dt><dd>Buttons ( for info boxes ).</dd>
+				<dt>--type &lt;aboutqt&gt;</dt><dd>Box Type ( no type will display aboutbox for Qt ).</dd>
+			</gridspan>
+		</code>
+		<dt></dt><br>
+		<div align="left"></div>
 
+		<b>Dialog types:</b><br>
+		about<br>
+		aboutqt<br>
+		query<br>
+		info<br>
+		warn<br>
+		fatal<br>
+		input<br>
+		getitem<br>
+		form<br>
+		list<br>
+		textfile<br>
+		imagefile<br>
+		colour<br>
+		font<br>
+		text
+		tailbox<br>
+		notepad<br>
+		richtext<br>
+		<br>
+		<code>yadqt --type=fatal -t "DANGER!" -b "BSOD!" --buttons="abort|Ignore" --btntoerr 2>/dev/pts/2;echo $?</code><br>
+		<img src="screenshots/fatal.png" alt="screenshots/fatal.png" title="type=fatal"><br>
+		<br>
 
-      Displays help on commandline options.</code><code><br>
-    </code><code>&nbsp;
-      --help-all&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<code>cat /usr/include/linux/limits.h|yadqt --type=getitem -t "Select Item" -b "Items:"  --ipseparator=newline --fromstdin<br>
+		yadqt --type=getitem -t "my title" -b "some input"  -d "one|three|two|end" --btntoerr 2>/dev/pts/2;echo $?</code><br>
+		<img src="screenshots/getitem.png" alt="screenshots/getitem.png" title="type=getitem"><br>
+		<br>
 
+		<code>yadqt --type=input -t "my title" -b "some input"  -d "default input txt";echo $?</code><br>
+		<img src="screenshots/input.png" alt="screenshots/input.png" title="type=input"><br>
+		<br>
 
+		<code>yadqt --type=info -b "Some info for you" --buttons="ok" --btntoerr 2>/dev/pts/2;echo $?</code><br>
+		<img src="screenshots/info.png" alt="screenshots/info.png" title="type=info"><br>
+		<br>
 
-      Displays help including Qt specific options.</code><code><br>
-    </code><code>&nbsp; -v,
-      --version&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<code>yadqt --type=form -t "Simple Form" -b "Entry 1|Box Two|Data 3|Last Box" --btntoerr --default="default 1|box 2|box n"  2>/dev/pts/2;echo $?</code><br>
+		<img src="screenshots/form.png" alt="screenshots/form.png" title="type=form"><br>
+		<br>
 
+		<code>yadqt --type=form -t "Simple Form" -b "Entry 1|Box Two|Data 3|Last Box"  --default="default 1|box 2|box n" --width=300 --height=0</code><br>
+		<img src="screenshots/form2.png" alt="screenshots/form2.png" title="type=form"><br>
+		<br>
 
+		<code>yadqt --type=list -t "Simple List" --default="$(cat /etc/fstab|tr '\\n' '|')" --multiple --btntoerr --width=600 --height=350 2>/dev/pts/2;echo $?<br>
+yadqt --type=list -t "Simple List" --default="$(cat /etc/fstab)" --btntoerr --width=600 --height=350 --ipseparator="newline"<br>
+yadqt --type=list -t "Simple List" --default="default 1|item 2|item 3|num 4|five|666|item nth" --multiple  --opseparator="newline";echo $?</code><br>
+		<img src="screenshots/list1.png" alt="screenshots/list.png" title="type=list"><br>
+		<br>
 
-      Displays version information.</code><code><br>
-    </code><code>&nbsp; -t, --title
-      &lt;YadQt&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      Title.</code><code><br>
-    </code><code>&nbsp; -b, --body
-      &lt;Information&gt;&nbsp;&nbsp;&nbsp;&nbsp; Body.</code><code><br>
-    </code><code>&nbsp; -d, --default &lt;keithhedger&gt;&nbsp; Default
-      text ( lists, forms etc, 1st positional<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<code>yadqt --type=text -t "Show Text" --default="some text@second line@third line" --ipseparator=@</code><br>
+		<img src="screenshots/text1.png" alt="screenshots/text1.png" title="type=text""><br>
+		<br>
 
-      arg passed will overide this ).</code><code><br>
-    </code><code>&nbsp;
-      --fromstdin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<code>while read;do echo $REPLY;done< <(cat /etc/fstab)|yadqt --type=text --fromstdin --width=800 -t "Show Text"</code><br>
+		<img src="screenshots/text2.png" alt="screenshots/text2.png" title="type=text"><br>
+		<br>
 
+		<code>yadqt --type=textfile --width=800 --height=400 -d /usr/include/linux/limits.h  --btntoerr  2>/dev/pts/3;echo $?</code><br>
+		<img src="screenshots/textfile.png" alt="screenshots/textfile.png" title="type=textfile"><br>
+		<br>
 
+		<code>yadqt --type=imagefile -d '/home/keithhedger/WallpapersByCatagory/AllHallows/halloween-graveyard.gif'<br>
+yadqt --type=imagefile -d '/home/keithhedger/Backgrounds/bc3.png' --height=420 --width=640</code><br>
+		<img src="screenshots/image.png" alt="screenshots/image.png" title="type=imagefile"><br>
+		<br>
 
-      Read default data from stdin.</code><code><br>
-    </code><code>&nbsp; --width
-      &lt;640&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<code>yadqt --type=colour --default="#c080ff80" -t "Select a colour..."|yadqt --type=input -t "Results" -b "Colour Selected" --fromstdin<br>
+yadqt --type=colour --default="#c080ff80" --btntoerr -t "Select a colour..."  2>/dev/pts/2;echo $?</code><br>
+		<img src="screenshots/colour.png" alt="screenshots/colour.png" title="type=colour"><br>
+		<br>
 
+		<code>yadqt --type=font -d "Monospace,20"</code><br>
+		<img src="screenshots/font.png" alt="screenshots/font.png" title="screenshots/font.png"><br>
+		<br>
 
+		<br>
+		<b>Tailbox will update additions from file:</b><br>
+		<code>tail -n25 -f '/run/XfceWMScript.log' |yadqt --type=tailbox -t "Tail box" --width=800<br>
+		Or<br>
+		yadqt --type=tailbox -t "Tail box" --width=800 < /run/XfceWMScript.log</code><br>
+		<img src="screenshots/tailbox.png" alt="screenshots/tailbox.png" title="type=tailbox"><br>
+		<br>
 
-      Dialog width ( set to 0 for default size for</code><code><br>
-    </code><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<b>Notepad simple text file editor:</b><br>
+		<code>yadqt --type=notepad --width=800 --height=400  ../../README ;echo $?</code><br>
+		<img src="screenshots/notepad.png" alt="screenshots/notepad.png" title="type=notepad"><br>
+		<br>
 
+		<b>Simple search in current folder:</b><br>
+		Searches files for text and opens in default app.<br>
+		<code>find .  -print0 |xargs -0 grep -s --binary-files=without-match --ignore-case --binary-files=without-match --line-number "$(yadqt --type=input -t Search -b "Search for")"|yadqt --type=list -t "Found" --width 800 --fromstdin --ipseparator=newline |awk -F: '{print $1}'|xargs xdg-open</code><br>
+		<img src="screenshots/search1.png" alt="screenshots/search1.png" title="type=input"><br>
+		<img src="screenshots/search2.png" alt="screenshots/search2.png" title="type=list"><br>
+		<br>
+		<hr width=100% size="2">
+		<div align="center">
+			Some options are not yet implemented<br>
+			<br>
+			TODO<br>
+			Documentation - ONGOING â€¦ :(<br>
+			more boxes<br>
+			set o/p separator for data.DONE<br>
+			set i/p separator for data.DONE<br>
+			<br>
 
-
-      dialog ).</code><code><br>
-    </code><code>&nbsp; --height
-      &lt;320&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-      Dialog height ( set to 0 for default size for</code><code><br>
-    </code><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-      dialog ).</code><code><br>
-    </code><code>&nbsp; --opseparator
-      &lt;|&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-      Separator for multi item output ( use "newline"</code><code><br>
-    </code><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-      to use '\n' ).</code><code><br>
-    </code><code>&nbsp; --ipseparator
-      &lt;|&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-      Separator for multi item default text input ( use "newline"</code><code><br>
-    </code><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-      to use '\n' ).</code><code><br>
-    </code><code>&nbsp;
-      --multiple&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-      Select multiple items ( lists ).</code><code><br>
-    </code><code>&nbsp;
-      --btntoerr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-      Print button to stderr.</code><code><br>
-    </code><code>&nbsp; --buttons
-      &lt;Ok&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-      Buttons ( for info boxes ).</code><code><br>
-    </code><code>&nbsp; --type
-      &lt;aboutqt&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
-
-      Box Type ( no type will display aboutbox for Qt ).<br>
-      <br>
-    </code><b>Dialog types:</b><br>
-    about<br>
-    aboutqt<br>
-    query<br>
-    info<br>
-    warn<br>
-    fatal<br>
-    input<br>
-    getitem<br>
-    form<br>
-    list<br>
-    textfile<br>
-    imagefile<br>
-    colour<br>
-    font<br>
-    text<br>
-    tailbox<br>
-    notepad<br>
-    <br>
-    <b>Examples:</b><br>
-    yadqt --type=aboutqt<br>
-    <br>
-    yadqt --type=fatal -t "DANGER!" -b "BSOD!" --buttons="abort|Ignore"
-    --btntoerr 2&gt;/dev/pts/2;echo $?<br>
-    <img moz-do-not-send="true" src="screenshots/fatal.png"
-      title="type=fatal" alt="type=fatal" height="136" width="196"><br>
-    <br>
-    <code>cat /usr/include/linux/limits.h|yadqt --type=getitem -t
-      "Select Item" -b "Items:"&nbsp; --ipseparator=newline --fromstdin</code><code><br>
-    </code><code>yadqt --type=getitem -t "my title" -b "some
-      input"&nbsp; -d "one|three|two|end" --btntoerr
-      2&gt;/dev/pts/2;echo $?</code><code><br>
-    </code><code><img moz-do-not-send="true"
-        src="screenshots/getitem.png" title="type=getitem"
-        alt="type=getitem" height="132" width="208"><br>
-    </code><br>
-    <code>yadqt --type=input -t "my title" -b "some input"&nbsp; -d
-      "default input txt";echo $?</code><br>
-    <img moz-do-not-send="true" src="screenshots/input.png"
-      title="type=input" alt="type=input" height="132" width="208"><br>
-    <br>
-    <code>yadqt --type=info -b "Some info for you" --buttons="ok"
-      --btntoerr 2&gt;/dev/pts/2;echo $?</code><br>
-    <img moz-do-not-send="true" src="screenshots/info.png"
-      title="type=info" alt="type=info" height="136" width="204"><br>
-    <br>
-    <code>yadqt --type=form -t "Simple Form" -b "Entry 1|Box Two|Data
-      3|Last Box" --btntoerr --default="default 1|box 2|box n"&nbsp;
-      2&gt;/dev/pts/2;echo $?</code><br>
-    <img moz-do-not-send="true" src="screenshots/form.png"
-      title="type=form" alt="type=form" height="186" width="231"><br>
-    <br>
-    <code>yadqt --type=form -t "Simple Form" -b "Entry 1|Box Two|Data
-      3|Last Box"&nbsp; --default="default 1|box 2|box n" --width=300
-      --height=0</code><br>
-    <img moz-do-not-send="true" src="screenshots/form2.png"
-      title="type=form" alt="type=form" height="183" width="308"><br>
-    <br>
-    <code>yadqt --type=list -t "Simple List" --default="$(cat
-      /etc/fstab|tr '\\n' '|')" --multiple --btntoerr --width=600
-      --height=350 2&gt;/dev/pts/2;echo $?</code><code><br>
-    </code><code>yadqt --type=list -t "Simple List" --default="$(cat
-      /etc/fstab)" --btntoerr --width=600 --height=350
-      --ipseparator="newline"</code><code><br>
-    </code><code>yadqt --type=list -t "Simple List" --default="default
-      1|item 2|item 3|num 4|five|666|item nth" --multiple&nbsp;
-      --opseparator="newline";echo $?</code><br>
-    <img moz-do-not-send="true" src="screenshots/list1.png"
-      title="type=list" alt="type=list" height="265" width="272"><br>
-    <br>
-    <code>yadqt --type=text -t "Show Text" --default="some text@second
-      line@third line" --ipseparator=@</code><br>
-    <img moz-do-not-send="true" src="screenshots/text1.png"
-      title="type=text" alt="type=text" height="265" width="272"><br>
-    <br>
-    <code>while read;do echo $REPLY;done&lt; &lt;(cat /etc/fstab)|yadqt
-      --type=text --fromstdin --width=800 -t "Show Text"</code><br>
-    <img moz-do-not-send="true" src="screenshots/text2.png"
-      title="type=text" alt="type=text" height="356" width="808"><br>
-    <br>
-    <code>yadqt --type=textfile --width=800 --height=400 -d
-      /usr/include/linux/limits.h&nbsp; --btntoerr&nbsp;
-      2&gt;/dev/pts/3;echo $?</code><br>
-    <img moz-do-not-send="true" src="screenshots/textfile.png"
-      title="type=textfile" alt="type=textfile" height="436" width="808"><br>
-    <br>
-    <code>yadqt --type=imagefile -d
-'/home/keithhedger/WallpapersByCatagory/AllHallows/halloween-graveyard.gif'</code><code><br>
-    </code><code>yadqt --type=imagefile -d
-      '/home/keithhedger/Backgrounds/bc3.png' --height=420 --width=640</code><br>
-    <img moz-do-not-send="true" src="screenshots/image.png"
-      title="type=imagefile" alt="type=imagefile" height="252"
-      width="208"><br>
-    <br>
-    <code>yadqt --type=colour --default="#c080ff80" -t "Select a
-      colour..."|yadqt --type=input -t "Results" -b "Colour Selected"
-      --fromstdin</code><code><br>
-    </code><code>yadqt --type=colour --default="#c080ff80" --btntoerr -t
-      "Select a colour..."&nbsp; 2&gt;/dev/pts/2;echo $?</code><br>
-    <img moz-do-not-send="true" src="screenshots/colour.png"
-      title="type=colour" alt="type=colour" height="469" width="537"><br>
-    <br>
-    <code>yadqt --type=font -d "Monospace,20"</code><br>
-    <img moz-do-not-send="true" src="screenshots/font.png"
-      title="type=font" alt="type=font" height="396" width="508"><br>
-    <br>
-    <meta name="qrichtext" content="1">
-    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><!--StartFragment--><b>Tailbox will update additions from file</b></p>
-    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><code>tail -n25 -f '/run/XfceWMScript.log' |yadqt --type=tailbox -t "Tail box" --width=800</code></p>
-    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Or</p>
-    <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><code>yadqt --type=tailbox -t "Tail box" --width=800 &lt; /run/XfceWMScript.log</code><!--EndFragment--></p>
-    <meta http-equiv="Content-Type" content="text/html;
-      charset=windows-1252">
-    <style type="text/css">
-p, li { white-space: pre-wrap; }</style><img moz-do-not-send="true"
-      src="screenshots/tailbox.png" title="type=tailbox"
-      alt="type=tailbox" height="356" width="808"><br>
-    <br>
-    <b> Notepad simple text file editor</b><br>
-    <code>yadqt --type=notepad --width=800 --height=400&nbsp;
-      ../../README ;echo $?<br>
-      <img moz-do-not-send="true" src="screenshots/notepad.png"
-        title="--type=tailbox" alt="--type=tailbox" height="436"
-        width="808"><br>
-      <br>
-    </code> <b>Simple search in current folder:</b><br>
-    Searches files for text and opens in default app.<br>
-    <code>find .&nbsp; -print0 |xargs -0 grep -s
-      --binary-files=without-match --ignore-case
-      --binary-files=without-match --line-number "$(yadqt --type=input
-      -t Search -b "Search for")"|yadqt --type=list -t "Found" --width
-      800 --fromstdin --ipseparator=newline |awk -F: '{print $1}'|xargs
-      xdg-open</code><br>
-    <img moz-do-not-send="true" src="screenshots/search1.png"
-      title="type=input" alt="type=input" height="132" width="208"><br>
-    <br>
-    <img moz-do-not-send="true" src="screenshots/search2.png"
-      title="type=list" alt="type=list" height="356" width="808"><br>
-    <br>
-    <div align="center">Some options are not yet implemented<br>
-      <br>
-      TODO<br>
-      documentation - ONGOING … :(<br>
-      more boxes<br>
-      set o/p separator for data.DONE<br>
-      set i/p separator for data.DONE<br>
-    </div>
-    <br>
-    <div align="center"><br>
-      <b> </b><b>Get It Here:<br>
-        <a moz-do-not-send="true"
-          href="https://github.com/KeithDHedger/YadQt">YadQt</a><br>
-        <br>
-      </b><b>
-        <hr width="100%" size="2"> <font size="4"> <b> </b></font></b><br>
-      <b><font size="4"><b> <a href="#totop" moz-do-not-send="true">Back
-
-
-              To Top</a></b></font></b><br>
-      <b><font size="4"><b> </b></font></b><br>
-      <b><font size="4"><b> <a
-              href="https://keithdhedger.github.io/pages/apps.html"
-              moz-do-not-send="true">Back To Applications</a></b></font></b><br>
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-  </body>
+			Get It Here:<br>
+			<a href="https://github.com/KeithDHedger/YadQt">YadQt</a><br><br>
+			<hr width=100% size="2"><br>
+			<a href="#top">Back To Top</a><br>
+			<br>
+			<a href="https://keithdhedger.github.io/pages/apps.html">Back To Applications</a><br>
+		</div>
+	</body>
 </html>
