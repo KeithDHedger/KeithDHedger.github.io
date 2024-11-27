@@ -49,7 +49,7 @@
                 <dd>Types are:<br>
 					about aboutqt query info warn fatal input getitem
 					form list textfile imagefile colour font text
-					tailbox notepad richtext.<br>
+					tailbox notepad richtext openfile savefile.<br>
 					More info and examples here:<br>
 					https://keithdhedger.github.io/pages/yadqt/yadqt.html<br>
 				</dd>
@@ -78,6 +78,8 @@
 		tailbox<br>
 		notepad<br>
 		richtext<br>
+		openfile<br>
+		savefile<br>
 		<br>
 
 		<b>Examples:</b><br>
@@ -160,6 +162,20 @@ yadqt --type=colour --default="#c080ff80" --btntoerr -t "Select a colour..."  2>
 		<code>yadqt --type=richtext --width=800 --height=400 '/tmp/KeithDHedger.github.io/docs/index'</code><br>
 		<img src="screenshots/richtext.png" alt="screenshots/richtext.png" title="type=richtext"><br>
 		<br>
+
+		<b>File choosers:</b><br>
+		<code>yadqt --type=openfile<br>
+			yadqt --type=savefile -d /tmp/somefile<br>
+		</code>
+		<img src="screenshots/openfile.png" alt="screenshots/openfile.png" title="type=openfile"><br>
+		<img src="screenshots/savefile.png" alt="screenshots/savefile.png" title="type=savefile"><br>
+		<br>
+
+		<b>Richtext simple richtext viewer:</b><br>
+		<code>yadqt --type=richtext --width=800 --height=400 '/tmp/KeithDHedger.github.io/docs/index'</code><br>
+		<img src="screenshots/richtext.png" alt="screenshots/richtext.png" title="type=richtext"><br>
+		<br>
+
 
 		<b>Simple search in current folder:</b><br>
 		Searches files for text and opens in default app.<br>
