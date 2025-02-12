@@ -47,6 +47,10 @@
 				<dt>--buttons &lt;Ok&gt;</dt><dd>Buttons ( for info boxes ).</dd>
 				<dt>--icon &lt;system-run&gt;</dt><dd>Icon to use for tray menu.</dd>
 				<dt>--timeout &lt;0&gt;</dt><dd>Timeout to use for tray menu message in mS ( 0=no message ).</dd>
+				<dt>--allowreload</dt><dd>Add 'Restart' item to tray menu.</dd>
+				<dt>--runfirst &lt;ARG&gt;</dt><dd>Run application ARG before starting/reloading traymenu.</dd>
+				<dt>--remember</dt><dd>Remembers last tray menu context menu item and sets main icon to menuitem icon, middle click then reactives last item.</dd>
+				<br>
 				<dt>--type &lt;aboutqt&gt;</dt><dd>Box Type ( no type will display aboutbox for Qt ).</dd>
                 <dd>Types are:<br>
 					about aboutqt query info warn fatal input getitem
@@ -171,11 +175,12 @@ yadqt --type=colour --default="#c080ff80" --btntoerr -t "Select a colour..."  2>
 		<b>System tray icon examples:</b><br>
 		<code>
 			Left click for balloon message, right click for menu.<br>
-			yadqt --type=traymenu --title="Run Apps" --icon=system-run --data="XTerm|xterm|xterm|Open Google|google-chrome|xdg-open https://www.google.com|New Email|mail_new|xdg-email" --timeout=1000<br>
+			yadqt --type=traymenu --title="Run Apps" --icon=system-run --data="XTerm|xterm|xterm|Open Google|google-chrome|xdg-open https://www.google.com|New Email|mail_new|xdg-email" --timeout=1000 --remember<br>
 			YadQt/resources/examples/trayexample.sh
 		</code><br>
 		<img src="screenshots/bubble.png" alt="screenshots/bubble.png" title="type=traymenu"><br>
 		<img src="screenshots/apps.png" alt="screenshots/apps.png" title="type=traymenu"><br>
+		<img src="screenshots/remember.png" alt="screenshots/remember.png" title="type=traymenu"><br>
 		<img src="screenshots/places.png" alt="screenshots/places.png" title="type=traymenu"><br>
 		<img src="screenshots/localapps.png" alt="screenshots/localapps.png" title="type=traymenu"><br>
 		<br>
