@@ -12,7 +12,8 @@
 <body bgcolor="#cccccc" text="#000000">
 
 <div align="center"><h1 id="bash-compiler">Bash Compiler</h1>
-</div><h6></h6>
+</div>
+<h6></h6>
 <p>Just started so lots to do.</p>
 <h6 id="-1"></h6>
 <p>Doesn't use AI, or obfuscation, outputs compileable C++ code.<br />
@@ -22,11 +23,16 @@ Main use is for simpler but time consuming scripts, eg recursing through
 a music collection.</p>
 <h6 id="-2"></h6>
 <h3 id="compile-with">Compile with:</h3>
-<pre><code>./autogen.sh --prefix=/usr
+<pre class="console"><code>./autogen.sh --prefix=/usr
 make
-sudo make install ( optional ).</code></pre>
+sudo make install ( optional ).
+</code></pre>
+<h4 id="simple-usage">Simple Usage:</h4>
+<pre class="console"><code>bashcompiler -V /PATH/TO//BASHSCRIPT &gt;/tmp/x.cpp
+g++ -Wall $(pkg-config --cflags --libs Qt5Core ) -fPIC  -Ofast /tmp/x.cpp -o APPNAME</code></pre>
 <p>The bashcompiler executable can be installed or run directly from the
-BashCompiler/app folder, or just copy it somewhere convienient.</p>
+BashCompiler/app folder, or just copy it somewhere convienient.<br />
+There are a number of examples in BashCompiler/resources/scripts.</p>
 <h6 id="-3"></h6>
 <h3 id="caveates">Caveates:</h3>
 <p>BASH is weakly typed so you <strong>MUST</strong> use "=, ==, &lt;,
@@ -49,7 +55,7 @@ loop.</p>
 embedded '\n' to '\N'.</p>
 <p>Positional paramaters should be assigned to a variable BEFORE string
 slicing eg:</p>
-<pre><code>file=${1}
+<pre class="console"><code>file=${1}
 echo ${file^^}
 AND NOT
 echo ${1^^}</code></pre>
@@ -58,7 +64,7 @@ echo ${1^^}</code></pre>
 run.</p>
 <h6 id="-6"></h6>
 <h3 id="usage">USAGE:</h3>
-<pre><code>bashcompiler /PATH/TO/SCRIPT &gt; /tmp/x.cpp
+<pre class="console"><code>bashcompiler /PATH/TO/SCRIPT &gt; /tmp/x.cpp
 Or nice output:
 bashcompiler /PATH/TO/SCRIPT| astyle -A7 --indent=tab &gt; /tmp/x.cpp
 pushd /tmp
