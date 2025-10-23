@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>ManPageEditorQT</title>
+	</head>
+	<body vlink="#551A8B" text="#000000" bgcolor="#cccccc" alink="#EE0000" link="#0000EE">
+		<a name="totop"></a>
+		<div align="center"><span style="font-size:64px;"><b>Manpage Editor QT</b></span></div>
+		<hr width=100% size="2">
+		<div align="center">
+			<img src="mainwindow.png" alt="mainwindow.png" title="mainwindow"><br>
+			<hr width=100% size="2">
+			<b><span style="font-size:24px;">What it is and does</span></b><br>
+
+			I write a number of my own programs, and have always had a bit of a problem writing the manpage.<br>
+			This is the QT 5/6 version of my gtk 2/3 <a href="https://keithdhedger.github.io/pages/manpageeditor/manpageeditor.html">manpage editor</a>.<br>
+			<hr width=100% size="2">
+			<b><span style="font-size:48px;">Manual</span></b>
+			<hr width=100% size="2">
+
+			<a href="#filemenu">File Menu</a><br>
+			<a href="#spellcheck">Spell Check</a><br>
+			<a href="#toolbar">Tool Bar</a><br>
+			<a href="#prefs">Preferences</a><br>
+  			<a href="#properties">Properties</a><br>
+			<a href="#textformatting">Text Formatting</a><br>
+			<a href="#todo">ToDo</a><br>
+			<hr width=100% size="2">
+			<a name="filemenu"></a>
+
+			<b><span style="font-size:24px;"><u>File Menu</u></span></b><br>
+			<img src="filemenu.png" alt="File Menu" title="File Menu"><br>
+			New Manpage will create a new manpage.<br>
+			New Section adds a section to the manpage.<br>
+			Open opens a manpage file.<br>
+			Open opens a system install manpage by name.<br>
+			Open Template opens a template file installed in PREFIX/share/ManPageEditorQT/examples, you can change this template to suit your tastes or replace it with your own template, at some future stage I will add more templates and possibly add a template folder.<br>
+			<img src="syspage.png" alt="syspage.png" title="syspage.png"><br>
+			Preview Manpage will preview the manpage in ( at the moment ) xterm, the terminal to be used will be set in prefs.<br>
+			Save/Save As/Quit and Close are standard.<br>
+
+			<a name="spellcheck"></a><br>
+			<b><span style="font-size:24px;"><u>Spell Check</u></span></b><br>
+			Spell check a section from the 'Edit' menu.<br>
+			<img src="spell.png" alt="spell.png" title="spell.png"></b><br><br>
+			Ignore will ignore the word for the rest of the sesion, Apply will change the word, Close just shuts the dialog doing nothing.<br>
+			<img src="spell2.png" alt="spell2.png" title="spell2.png"><br>
+
+			<a name="toolbar"></a><br>
+			<b><span style="font-size:24px;"><u>Toolbar</u></span></b><br>
+			<img src="toolbar.png" alt="Toolbar" title="Toolbar"><br>
+			Pretty standard the entry box is a 'Live' search just start typing, press enter to go to the next match and shift+enter for the previous.<br><br>
+
+			<a name="prefs"></a>
+			<b><span style="font-size:24px;">Preferences</span></b><br>
+			<img src="prefs.png" alt="prefs.png" title="prefs.png"><br>
+			Terminal Command is used to display the manpage preview.<br>
+			Highlight Colour is used to hiighlight the current line, if you don't want the line highlighted set the alpha to 0.<br>
+			Extra Highlight Colour is used by the spell checker.<br>
+			GZip Pages will gzip a page automatically when saving, pages are automatically unzipped if needed when opening.<br>
+			Wrap Lines is only used in the GUI and doesn't effect the saved manpage.<br>
+			Most ( all? ) terminals will show italic text as underlined, this simulates this, again no effect on the saved  manpage.<br>
+			<br>
+
+			<a name="properties"></a>
+			<b><span style="font-size:24px;">Properties</span></b><br>
+			<img src="props.png" alt="Properties" title="Properties"><br>
+			Set the properties for the entire manpage.<br><br>
+			<img src="sectionopt.png" alt="sectionopts" title="sectionopts"><br>
+			Right clicking on a tab will bring up the section properties dialog allowing you to change the name of the section and/or the section type.<br>
+			Upper case tab names are main sections, lower case are sub sections, The tab case is for visual looks only the actual case of the section is what is typed in the 'Name' edit.<br>
+			It's usual for a main section to be all uppercase.<br><br>
+			
+			<a name="textformatting"></a>
+			<b><span style="font-size:24px;">Text Formatting</span></b><br>
+Simple text formatting is done via the 'Formatting' menu just select a piece of text and select bold/italic or clear, italic text tends to be shown in the terminal as underlined, this can be set in the prefs.<br>
+			<br>
+
+			<a name="todo"></a>
+			<b><span style="font-size:24px;">ToDo</span></b><br>
+			More help.<br>
+			<s>Prefs</s>.<br>
+			<s>Terminal command.</s><br>
+			<s>Gzip pages.</s><br>
+			<s>Highlight line</s>.<br>
+			<s>Wrap lines.</s><br>
+			<br>
+			<s>Spell check</s>.<br>
+			<s>Add template(s).</s><br>
+			<s>Unzip page if needed.</s><br>
+			<br>
+
+<hr width=100% size="2">
+<a href="#totop">Back To Top</a><br>
+<br>
+<a href="../../pages/apps.html">Back To Applications</a>
+<br>
+
+		</div>
+	</body>
+</html>
